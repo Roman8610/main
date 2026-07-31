@@ -15,7 +15,14 @@ class MeetingQuestionController extends Controller
     /**
      * Создание нового постановочного вопроса
      */
-    public function actionCreate() {}
+    public function actionCreate()
+    {
+        $modelForm = new MeetingQuestion();
+        
+        return $this->render('create', [
+            'modelForm' => $modelForm,
+        ]);
+    }
     /**
      * Редактирование постановочного вопроса
      */
@@ -23,7 +30,8 @@ class MeetingQuestionController extends Controller
     /**
      * Просмотр постановочного вопроса
      */
-    public function actionView(int $id) {
+    public function actionView(int $id)
+    {
         $question = MeetingQuestion::findOne($id);
 
         if ($question === null) {
@@ -32,7 +40,7 @@ class MeetingQuestionController extends Controller
         return $this->render('view', [
             'question' => $question,
         ]);
-    } 
+    }
     /**
      * Удаление постановочного вопроса
      */
