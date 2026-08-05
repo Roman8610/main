@@ -19,8 +19,8 @@ $this->registerMetaTag(['name' => 'description', 'content' => $this->params['met
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
 ?>
- <!-- Подключаем FontAwesome через CDN -->
-   
+<!-- Подключаем FontAwesome через CDN -->
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
@@ -62,6 +62,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         NavBar::end();
         ?>
     </header>
+
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
+        <div class="alert alert-success" style="scroll-margin-top: 80px">
+            <?= Yii::$app->session->getFlash('success') ?>
+        </div>
+    <?php endif; ?>
 
     <main id="main" class="flex-shrink-0" role="main">
         <div class="container">
