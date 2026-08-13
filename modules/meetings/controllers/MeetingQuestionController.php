@@ -2,18 +2,12 @@
 
 namespace app\modules\meetings\controllers;
 
-use app\modules\meetings\models\Departments;
-use app\modules\meetings\models\DepQuestions;
-use app\modules\meetings\models\Directions;
-use app\modules\meetings\models\DirQuestions;
+use app\modules\meetings\forms\CreateMeetingQuestionForm;
 use app\modules\meetings\models\MeetingQuestion;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-/**
- * CRUD Постановочных вопросов
- */
 class MeetingQuestionController extends Controller
 {
     public function actionIndex() {}
@@ -22,55 +16,22 @@ class MeetingQuestionController extends Controller
      */
     public function actionCreate(int $id)
     {
-        $modelForm = new MeetingQuestion();
+        $formModel = new CreateMeetingQuestionForm();
 
-        if ($modelForm->load(\Yii::$app->request->post())) {
-            $modelForm->meeting_id = $id;
-            $modelForm->status = 0;
-            $modelForm->subsidiary_id = 1;
-            $modelForm->sender_subsidiary_id = 1;
+        $post = Yii::$app->request->post();
 
+        if ($formModel->load($post)) {
+            $formModel->meeting_id = $id;
+            $formModel->user_id = 1; // Yii::$app->user->id
+            $formModel->scenario =  $post['scenario'];
 
-            if ($modelForm->save()) {
-
-                if (!empty($modelForm->departments)) {
-                    foreach ($modelForm->departments as $department) {
-                        $departmentsModel = new Departments();
-                        $departmentsModel->name = $department;
-
-                        if ($departmentsModel->save()) {
-                            $depQuestModel = new DepQuestions();
-                            $depQuestModel->dep_id = $departmentsModel->id;
-                            $depQuestModel->quest_id = $modelForm->id;
-                            if ($depQuestModel->save()) {
-                            }
-                        }
-                    }
-                }
-
-                if (!empty($modelForm->directions)) {
-                    foreach ($modelForm->directions as $direction) {
-                        $directionsModel = new Directions();
-                        $directionsModel->name = $direction;
-
-                        if ($directionsModel->save()) {
-                            $dirQuestModel = new DirQuestions();
-                            $dirQuestModel->dir_id = $directionsModel->id;
-                            $dirQuestModel->quest_id = $modelForm->id;
-                            if ($dirQuestModel->save()) {
-                            }
-                        }
-                    }
-                }
-
-                Yii::$app->session->setFlash('success', 'Постановочный вопрос успешно добавлен');
-                return $this->redirect(['view', 'id' => $modelForm->id]);
+            if ($formModel->validate()) {
+                $service = Yii::$app->getModule('meetings')->get('createAndSubmitForModeration');
+                $question = $service->run($formModel);
+                return $this->redirect(['view', 'id' => $question->id]);
             }
         }
-
-        return $this->render('create', [
-            'modelForm' => $modelForm,
-        ]);
+        return $this->render('create', ['formModel' => $formModel]);
     }
 
     /**

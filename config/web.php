@@ -1,5 +1,10 @@
 <?php
 
+use app\modules\meetings\services\CreateAndSubmitForModerationService;
+use app\modules\meetings\services\CreateDraftMeetingQuestionService;
+use app\modules\meetings\services\MeetingQuestionAccessService;
+use app\modules\meetings\services\SubmitForModerationService;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -10,6 +15,20 @@ $config = [
     'modules' => [
         'meetings' => [
             'class' => 'app\modules\meetings\Module',
+            'components' => [
+                'createDraftMeetingQuestionService' => [
+                    'class' => CreateDraftMeetingQuestionService::class,
+                ],
+                'meetingQuestionAccessService' => [
+                    'class' => MeetingQuestionAccessService::class,
+                ],
+                'createAndSubmitForModeration' =>[
+                    'class' => CreateAndSubmitForModerationService::class,
+                ],
+                'submitForModerationService' =>[
+                    'class' => SubmitForModerationService::class,
+                ],
+            ]
         ],
     ],
     'aliases' => [

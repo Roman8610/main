@@ -2,6 +2,9 @@
 
 namespace app\modules\meetings;
 
+use app\modules\meetings\services\CreateMeetingQuestionService;
+use app\modules\meetings\services\MeetingQuestionAccessService;
+
 /**
  * Модуль постановочных вопросов для совещаний.
  *
@@ -27,17 +30,6 @@ namespace app\modules\meetings;
  */
 class Module extends \yii\base\Module
 {
-    // public $container = [
-    //     'definitions' => [
-    //         StatusTransitionServiceInterface::class => StatusTransitionService::class,
-    //         PermissionServiceInterface::class      => PermissionService::class,
-
-    //         \app\modules\meetings\services\ModerateQuestionService::class => [
-    //             'statusService'   => StatusTransitionServiceInterface::class,
-    //             'permissionService' => PermissionServiceInterface::class,
-    //         ],
-    //     ],
-    // ];
     public $controllerNamespace = 'app\modules\meetings\controllers';
 
     public function init()
