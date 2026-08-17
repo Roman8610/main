@@ -1,15 +1,22 @@
 <?php
+
 namespace app\modules\meetings\services;
 
 use yii\web\NotFoundHttpException;
 
 class MeetingQuestionAccessService
 {
-    public function canCreate(int $meeting_id, int $user_id): bool
+    /**
+     * Проверяет может ли пользователь создать вопрос в совещании
+     * @param int $meeting_id
+     * @param int $user_id
+     * @return bool
+     */
+    public function canCreate(int $meetingId, int $userId): bool
     {
 
         // Проверяем существует ли совещание
-        $meeting = \app\modules\meetings\models\Meeting::findOne($meeting_id);
+        $meeting = \app\modules\meetings\models\Meeting::findOne($meetingId);
         if (!$meeting) {
             throw new NotFoundHttpException('Совещание не найдено');
         }
@@ -19,12 +26,30 @@ class MeetingQuestionAccessService
         // Является ли пользователь руководителем совещания
         // Является ли пользователь участником совещания
         // Является ли пользователь ответственным в филиале
-        // Если ниодна из проверок не возвращает true, возвращаем folse
+        // Если ниодна из проверок не возвращает true, возвращаем false
 
-        // if (!$role) {
-        //     return false; // Пользователь вообще не участвует в совещании
-        // }
-    
         return true;
+    }
+
+    /**
+     * Проверяет может ли пользователь отправить вопрос на модерацию
+     */
+    public function canSubmitForModeration(): bool
+    {
+        // Проверяем существует ли совещание 
+        // Если совещание не найдено , 
+        // то удалить вопрос а так же все связанные с ним сущности и выбросить исключение
+        // Проверяем является ли пользователь владельцем вопроса
+        return true;
+    }
+
+    /**
+     * Возвращает массив ролей пользователя для конкретного совещания
+     * @return array
+     */
+    public function getRoles(int $userId, int $meetingId): array
+    {
+        $roles = ['admin', 'moderator', 'user'];
+        return $roles;
     }
 }

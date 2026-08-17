@@ -1,4 +1,5 @@
 <?php
+
 namespace app\modules\meetings\services;
 
 use app\modules\meetings\forms\CreateMeetingQuestionForm;
@@ -6,23 +7,19 @@ use app\modules\meetings\forms\SubmitMeetingQuestionModerationForm;
 use app\modules\meetings\models\MeetingQuestion;
 use Yii;
 
-class CreateAndSubmitForModerationService{
+class CreateAndSubmitForModerationService
+{
 
-    public function run(CreateMeetingQuestionForm $formModel):MeetingQuestion{
-
+    public function run(CreateMeetingQuestionForm $formModel): MeetingQuestion
+    {
         $createDraft = Yii::$app->getModule('meetings')->get('createDraftMeetingQuestionService');
         $question = $createDraft->run($formModel);
 
-        if($formModel->scenario == 'submit_pending'){
-            $formPending = new SubmitMeetingQuestionModerationForm();
-            $formPending->question_id = $question->id;
-            $formPending->scenario = $formModel->scenario;
-
+        if ($formModel->scenario == 'submit_pending') {
             $submitPending = Yii::$app->getModule('meetings')->get('submitForModerationService');
-            $question = $submitPending->run($formPending);
+            $question = $submitPending->run($question);
         }
 
         return $question;
     }
-
 }

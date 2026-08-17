@@ -15,7 +15,7 @@ class Meeting extends ActiveRecord
     public function attributeLabels(): array
     {
         return [
-            'name' => 'Тема совещания'
+            'name' => 'Тема совещания',
         ];
     }
 }

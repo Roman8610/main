@@ -12,7 +12,6 @@ class CreateDraftMeetingQuestionService
 
     public function run(CreateMeetingQuestionForm $formModel): MeetingQuestion
     {
-        // Проверки прав и контекста
         if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreate($formModel->meeting_id, $formModel->user_id)) {
             throw new \yii\web\ForbiddenHttpException('У вас нет прав для создания постановочного вопроса');
         }
@@ -21,33 +20,36 @@ class CreateDraftMeetingQuestionService
         $question = new MeetingQuestion();
 
         $question->meeting_id = $formModel->meeting_id; // ID совещания
-        $question->name; // Название вопроса
+        $question->name = $formModel->name; // Название вопроса
         $question->question_text = $formModel->question_text; // Текст вопроса
-        $question->decision; // Предлагаемое решение вопроса
-        $question->commet; // Комментарий 
-        $question->deadline; // Срок выполнения
-        $question->created_at; // Дата создания
-        $question->updated_at; // Дата последнего обновления
+        $question->decision = $formModel->decision; // Предлагаемое решение вопроса
+        $question->commet = $formModel->comment; // Комментарий 
+        $question->deadline = $formModel->deadline; // Срок выполнения
+        $question->created_at = date('Y-m-d H:i:s'); // Дата создания
+        $question->updated_at = null; // Дата последнего обновления
         $question->created_by = $formModel->user_id; // Создатель
-        $question->updated_by = $formModel->user_id; // кто внес последние изменения
-        $question->status; // статус
+        $question->updated_by = null; // кто внес последние изменения
+        $question->status = MeetingQuestion::STATUS_DRAFT; // статус
+
+        if ($question->save(false)) {
+            $question_id = $question->id;
+        } else {
+            $errors = $question->getErrors();
+            Yii::$app->session->setFlash('error', 'Не удалось сохранить вопрос: ' . json_encode($errors));
+        }
+
+        $recipients_array = array_map(function ($item) use ($question_id) {
+            return [$question_id, $item];
+        }, $formModel->recipients);
 
         // Сохраняем получателей вопроса 
-        
-        $recipients = new RecipientsQuestions();
+        Yii::$app->db->createCommand()->batchInsert(
+            RecipientsQuestions::tableName(),
+            ['question_id', 'subsidiary_id'],
+            $recipients_array
+        )->execute();
 
-
-        // $question->status = MeetingQuestion::STATUS_DRAFT;
-
-        // if (!$question->validate('create_draft')) {
-        //     throw new ValidationException($question->getErrors());
-        // }
-
-        // return $question->save(false) ? $question : throw new RuntimeException('Ошибка сохранения');
-
-
-
-        return new MeetingQuestion();
+        return $question;
     }
     /**
      * Сохранение вопроса
@@ -57,12 +59,12 @@ class CreateDraftMeetingQuestionService
      * Сохранение получателей вопроса
      */
     private function saveRecipient() {}
-     /**
+    /**
      * Сохранение отделов
      */
-    private function saveDepartment(){}
+    private function saveDepartment() {}
     /**
      * Сохранение направлений
      */
-    private function saveDirection(){}
+    private function saveDirection() {}
 }

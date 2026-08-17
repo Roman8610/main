@@ -26,13 +26,18 @@ class MeetingQuestionController extends Controller
             $formModel->scenario =  $post['scenario'];
 
             if ($formModel->validate()) {
-                $service = Yii::$app->getModule('meetings')->get('createAndSubmitForModeration');
+                $service = Yii::$app->getModule('meetings')->get('createAndSubmitForModerationService');
                 $question = $service->run($formModel);
                 return $this->redirect(['view', 'id' => $question->id]);
             }
         }
         return $this->render('create', ['formModel' => $formModel]);
     }
+
+    /**
+     * Модерация постановочного вопроса
+     */
+    public function actionModeration() {}
 
     /**
      * Редактирование постановочного вопроса

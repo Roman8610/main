@@ -1,5 +1,5 @@
 <?php
-namespace modules\meetings\forms;
+namespace app\modules\meetings\forms;
 /**
  * Принимает ID постановочного вопроса который необходимо опубликовать
  * Валедирует данные

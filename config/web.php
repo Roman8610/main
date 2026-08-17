@@ -3,6 +3,7 @@
 use app\modules\meetings\services\CreateAndSubmitForModerationService;
 use app\modules\meetings\services\CreateDraftMeetingQuestionService;
 use app\modules\meetings\services\MeetingQuestionAccessService;
+use app\modules\meetings\services\MeetingQuestionVisibilityFilterService;
 use app\modules\meetings\services\SubmitForModerationService;
 
 $params = require __DIR__ . '/params.php';
@@ -22,11 +23,14 @@ $config = [
                 'meetingQuestionAccessService' => [
                     'class' => MeetingQuestionAccessService::class,
                 ],
-                'createAndSubmitForModeration' =>[
+                'createAndSubmitForModerationService' => [
                     'class' => CreateAndSubmitForModerationService::class,
                 ],
-                'submitForModerationService' =>[
+                'submitForModerationService' => [
                     'class' => SubmitForModerationService::class,
+                ],
+                'meetingQuestionVisibilityFilterService' => [
+                    'class' => MeetingQuestionVisibilityFilterService::class,
                 ],
             ]
         ],

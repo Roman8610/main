@@ -14,7 +14,7 @@ class SubmitMeetingQuestionModerationForm extends Model
 
     public function rules(){
         return [
-            [['scenario'], 'required'],
+            [['scenario', 'question_id'], 'required'],
         ];
     }
 }

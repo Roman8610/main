@@ -1,5 +1,5 @@
 <?php
-namespace modules\meetings\forms;
+namespace app\modules\meetings\forms;
 
 use yii\base\Model;
 

@@ -3,8 +3,10 @@
 namespace app\modules\meetings\controllers;
 
 use app\modules\meetings\models\Meeting;
-use app\modules\meetings\models\MeetingQuestionSearch;
+use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\models\MeetingSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -22,13 +24,18 @@ class MeetingsController extends Controller
     public function actionView(int $id)
     {
         $meeting = Meeting::findOne($id);
-
         if ($meeting === null) {
             throw new NotFoundHttpException('Совещание не найдено.');
         }
 
-        $modelSearch = new MeetingQuestionSearch();
-        $dataProvider = $modelSearch->searchID($id);
+        $userId = 1; // Yii::$app->user->id
+        $baseQuery = MeetingQuestion::findByQuestions($id);
+        $queryService = Yii::$app
+            ->getModule('meetings')
+            ->get('meetingQuestionVisibilityFilterService')
+            ->applyVisibilityConditions($baseQuery, $userId, $id);
+
+        $dataProvider = new ActiveDataProvider(['query' => $queryService]);
 
         return $this->render('view', [
             'meeting' => $meeting,

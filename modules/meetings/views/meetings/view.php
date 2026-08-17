@@ -5,6 +5,7 @@
  * @var yii\data\ActiveDataProvider $dataProviderQuestion 
  */
 
+use app\modules\meetings\models\MeetingQuestion;
 use kartik\icons\Icon;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -30,15 +31,65 @@ use yii\helpers\Html;
             'format' => 'html',
         ],
         [
-            'label' => Icon::show('comment') . 'Комментарии',
+            'label' => Icon::show('comment') . 'Ответ',
             'value' => function ($model) {
-                return '3 / 10';
+                return 'Есть';
             },
             'encodeLabel' => false,
             'format' => 'html',
         ],
         [
-            'label' => 'Статус',
+            'label' => 'Отправитель вопроса',
+        ],
+        [
+            'label' => 'Получатель вопроса',
+        ],
+        [
+            'attribute' => 'status',
+            'value' => function ($model) {
+                $labels = MeetingQuestion::getStatusLabels();
+                $classMap = [
+                    MeetingQuestion::STATUS_DRAFT    => 'text-secondary',
+                    MeetingQuestion::STATUS_PENDING  => 'text-warning',
+                    MeetingQuestion::STATUS_PUBLISHED => 'text-success',
+                    MeetingQuestion::STATUS_REJECTED  => 'text-danger',
+                    MeetingQuestion::STATUS_REMOVED   => 'text-muted',
+                ];
+                $label = isset($labels[$model->status]) && isset($classMap[$model->status]) ? $labels[$model->status] : 'Ошибка статуса!!!';
+                $css = isset($labels[$model->status]) && isset($classMap[$model->status])  ? $classMap[$model->status] : 'badge bg-danger';
+                return Html::tag('span', $label, ['class' => $css]);
+            },
+            'format' => 'html',
+        ],
+        [
+            'class'      => 'yii\grid\ActionColumn',
+            'template'   => '{view}{update}{delete}{moderate}',
+            'buttons' => [
+                'view' => function ($url, $model, $key) {
+                    return Html::a(Icon::show('eye'), ['view', 'id' => $model->id], [
+                        'class' => '',
+                        'title' => 'Просмотр',
+                    ]);
+                },
+                'update' =>  function ($url, $model, $key) {
+                    return Html::a(Icon::show('pencil'), ['view', 'id' => $model->id], [
+                        'class' => '',
+                        'title' => 'Редактирование',
+                    ]);
+                },
+                'delete' =>  function ($url, $model, $key) {
+                    return Html::a(Icon::show('trash'), ['view', 'id' => $model->id], [
+                        'class' => '',
+                        'title' => 'Удаление',
+                    ]);
+                },
+                'moderate' =>  function ($url, $model, $key) {
+                    return Html::a(Icon::show('triangle-exclamation'), ['view', 'id' => $model->id], [
+                        'class' => 'text-danger',
+                        'title' => 'Вопрос ожидает Вашей модерации',
+                    ]);
+                },
+            ],
         ],
     ],
 ]) ?>
