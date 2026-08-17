@@ -49,7 +49,7 @@ class MeetingQuestionAccessService
      */
     public function getRoles(int $userId, int $meetingId): array
     {
-        $roles = ['admin', 'moderator', 'user'];
+        $roles = ['moderator', 'user'];
         return $roles;
     }
 }

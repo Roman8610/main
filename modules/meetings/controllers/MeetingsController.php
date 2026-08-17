@@ -30,12 +30,12 @@ class MeetingsController extends Controller
 
         $userId = 1; // Yii::$app->user->id
         $baseQuery = MeetingQuestion::findByQuestions($id);
-        $queryService = Yii::$app
+        $query = Yii::$app
             ->getModule('meetings')
             ->get('meetingQuestionVisibilityFilterService')
             ->applyVisibilityConditions($baseQuery, $userId, $id);
 
-        $dataProvider = new ActiveDataProvider(['query' => $queryService]);
+        $dataProvider = new ActiveDataProvider(['query' => $query]);
 
         return $this->render('view', [
             'meeting' => $meeting,
