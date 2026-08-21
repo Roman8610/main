@@ -2,6 +2,7 @@
 
 namespace app\modules\meetings\services;
 
+use app\modules\meetings\enums\MeetingRole;
 use app\modules\meetings\models\MeetingQuestion;
 use Yii;
 use yii\db\ActiveQuery;
@@ -35,14 +36,14 @@ class MeetingQuestionVisibilityFilterService
         $rolesArray = Yii::$app
             ->getModule('meetings')
             ->get('meetingQuestionAccessService')
-            ->getRoles($userId, $meetingId);
+            ->getRoles($meetingId, $userId);
 
         if (empty($rolesArray)) {
             $query->where(['and', '1=0']);
             return $query;
         }
 
-        if (in_array('moderator', $rolesArray)) {
+        if (in_array(MeetingRole::MODERATOR->value, $rolesArray)) {
             $query->andWhere([
                 'or',
                 ['<>', 'status', MeetingQuestion::STATUS_DRAFT],
@@ -52,15 +53,14 @@ class MeetingQuestionVisibilityFilterService
                     ['=', 'created_by', $userId], // разрешаем только свои черновики
                 ],
             ]);
-        } elseif (in_array('user', $rolesArray)) {
+        } elseif (in_array(MeetingRole::USER_DO->value, $rolesArray) || in_array(MeetingRole::ATTENDEE->value, $rolesArray) || in_array(MeetingRole::RESPONSIBLE->value, $rolesArray) ) {
             $query->andWhere([
                 'or',
                 ['=', 'created_by', $userId],
                 ['=', 'status', MeetingQuestion::STATUS_PUBLISHED],
             ]);
         }
-
-
+        
         return $query;
     }
 }

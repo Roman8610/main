@@ -49,4 +49,12 @@ class MeetingQuestion extends ActiveRecord
     {
         return $this->hasMany(CommentQuestions::class, ['question_id' => 'id']);
     }
+
+    public function getMeeting(){
+        return $this->hasOne(Meeting::class, ['id' => 'meeting_id']);
+    }
+
+    public function getRecipients(){
+        return $this->hasMany(RecipientsQuestions::class, ['question_id' => 'id']);
+    }
 }

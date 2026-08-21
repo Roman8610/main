@@ -2,15 +2,14 @@
 
 namespace app\modules\meetings\services;
 
-use app\modules\meetings\forms\CreateMeetingQuestionForm;
-use app\modules\meetings\forms\SubmitMeetingQuestionModerationForm;
+use app\modules\meetings\forms\MeetingQuestionForm;
 use app\modules\meetings\models\MeetingQuestion;
 use Yii;
 
 class CreateAndSubmitForModerationService
 {
 
-    public function run(CreateMeetingQuestionForm $formModel): MeetingQuestion
+    public function run(MeetingQuestionForm $formModel): MeetingQuestion
     {
         $createDraft = Yii::$app->getModule('meetings')->get('createDraftMeetingQuestionService');
         $question = $createDraft->run($formModel);

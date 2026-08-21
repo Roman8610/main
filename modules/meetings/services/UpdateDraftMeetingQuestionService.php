@@ -1,1 +1,61 @@
-<?phpnamespace app\modules\meetings\services;use app\modules\meetings\forms\MeetingQuestionForm;use app\modules\meetings\models\MeetingQuestion;use app\modules\meetings\models\RecipientsQuestions;use Yii;use yii\web\ForbiddenHttpException;class UpdateDraftMeetingQuestionService{    public function run(MeetingQuestionForm $formModel): MeetingQuestion    {        $question = $this->findModel($formModel->id);        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, 1)) {            throw new ForbiddenHttpException('Доступ запрещен');        }        $formModel->loadFromQuestion($question);        $question->name = $formModel->name;        $question->question_text = $formModel->question_text;        $question->decision = $formModel->decision;        $question->comment = $formModel->comment;        $question->deadline = $formModel->deadline;        $question->updated_at = date('Y-m-d H:i:s');        $question->updated_by = $formModel->user_id;        if (!$question->save(false)) {            throw new \yii\base\Exception(                'Не удалось сохранить вопрос: ' . json_encode($question->getErrors())            );        }        RecipientsQuestions::deleteAll(['question_id' => $question->id]);        $recipients_array = array_map(function ($item) use ($question) {            return [$question->id, $item];        }, $formModel->recipients);        // Сохраняем получателей вопроса         Yii::$app->db->createCommand()->batchInsert(            RecipientsQuestions::tableName(),            ['question_id', 'subsidiary_id'],            $recipients_array        )->execute();        return $question;    }    private function findModel(int $id): MeetingQuestion    {        $question = MeetingQuestion::findOne($id);        if ($question === null) {            throw new \yii\web\NotFoundHttpException('Постановочный вопрос не найден');        }        return $question;    }}
+<?php
+
+namespace app\modules\meetings\services;
+
+use app\modules\meetings\forms\MeetingQuestionForm;
+use app\modules\meetings\models\MeetingQuestion;
+use app\modules\meetings\models\RecipientsQuestions;
+use Yii;
+use yii\web\ForbiddenHttpException;
+
+class UpdateDraftMeetingQuestionService
+{
+    public function run(MeetingQuestionForm $formModel): MeetingQuestion
+    {
+        $question = $this->findModel($formModel->id);
+
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, 1)) {
+            throw new ForbiddenHttpException('Доступ запрещен');
+        }
+
+        $formModel->loadFromQuestion($question);
+
+        $question->name = $formModel->name;
+        $question->question_text = $formModel->question_text;
+        $question->decision = $formModel->decision;
+        $question->comment = $formModel->comment;
+        $question->deadline = $formModel->deadline;
+        $question->updated_at = date('Y-m-d H:i:s');
+        $question->updated_by = $formModel->user_id;
+
+        if (!$question->save(false)) {
+            throw new \yii\base\Exception(
+                'Не удалось сохранить вопрос: ' . json_encode($question->getErrors())
+            );
+        }
+
+        RecipientsQuestions::deleteAll(['question_id' => $question->id]);
+
+        $recipients_array = array_map(function ($item) use ($question) {
+            return [$question->id, $item];
+        }, $formModel->recipients);
+
+        // Сохраняем получателей вопроса 
+        Yii::$app->db->createCommand()->batchInsert(
+            RecipientsQuestions::tableName(),
+            ['question_id', 'subsidiary_id'],
+            $recipients_array
+        )->execute();
+
+        return $question;
+    }
+
+    private function findModel(int $id): MeetingQuestion
+    {
+        $question = MeetingQuestion::findOne($id);
+        if ($question === null) {
+            throw new \yii\web\NotFoundHttpException('Постановочный вопрос не найден');
+        }
+        return $question;
+    }
+}

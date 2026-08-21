@@ -2,7 +2,7 @@
 
 namespace app\modules\meetings\services;
 
-use app\modules\meetings\forms\CreateMeetingQuestionForm;
+use app\modules\meetings\forms\MeetingQuestionForm;
 use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\models\RecipientsQuestions;
 use Yii;
@@ -10,10 +10,10 @@ use Yii;
 class CreateDraftMeetingQuestionService
 {
 
-    public function run(CreateMeetingQuestionForm $formModel): MeetingQuestion
+    public function run(MeetingQuestionForm $formModel): MeetingQuestion
     {
         if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreate($formModel->meeting_id, $formModel->user_id)) {
-            throw new \yii\web\ForbiddenHttpException('У вас нет прав для создания постановочного вопроса');
+            throw new \yii\web\ForbiddenHttpException('Доступ запрещен');
         }
 
         // Создаём модель вопроса

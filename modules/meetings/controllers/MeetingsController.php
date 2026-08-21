@@ -30,6 +30,7 @@ class MeetingsController extends Controller
 
         $userId = 1; // Yii::$app->user->id
         $baseQuery = MeetingQuestion::findByQuestions($id);
+
         $query = Yii::$app
             ->getModule('meetings')
             ->get('meetingQuestionVisibilityFilterService')

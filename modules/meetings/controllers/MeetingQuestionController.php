@@ -2,23 +2,47 @@
 
 namespace app\modules\meetings\controllers;
 
-use app\modules\meetings\forms\CreateMeetingQuestionForm;
+use app\modules\meetings\forms\MeetingQuestionForm;
+use app\modules\meetings\models\CommentQuestions;
 use app\modules\meetings\models\MeetingQuestion;
+use app\modules\meetings\models\Subsidiary;
 use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 class MeetingQuestionController extends Controller
 {
+
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ]
+        );
+    }
+
     public function actionIndex() {}
     /**
      * Создание нового постановочного вопроса
      */
     public function actionCreate(int $id)
     {
-        $formModel = new CreateMeetingQuestionForm();
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreate($id, 1)) {
+            throw new ForbiddenHttpException('Доступ запрещен');
+        }
 
+        $formModel = new MeetingQuestionForm();
         $post = Yii::$app->request->post();
+        $subsidiary = Subsidiary::find()->select(['name'])->indexBy('id')->column();
 
         if ($formModel->load($post)) {
             $formModel->meeting_id = $id;
@@ -31,27 +55,69 @@ class MeetingQuestionController extends Controller
                 return $this->redirect(['view', 'id' => $question->id]);
             }
         }
-        return $this->render('create', ['formModel' => $formModel]);
+        return $this->render('create', [
+            'formModel' => $formModel,
+            'subsidiary' => $subsidiary,
+        ]);
+    }
+
+    /**
+     * Редактирование постановочного вопроса
+     */
+    public function actionUpdate(int $id)
+    {
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($id, 1)) {
+            throw new ForbiddenHttpException('Доступ запрещен');
+        }
+        $formModel = new MeetingQuestionForm();
+        $question = $this->findModel($id);
+        $formModel->loadFromQuestion($question);
+
+        $post = Yii::$app->request->post();
+        if ($formModel->load($post)) {
+            $formModel->id = $id;
+            $formModel->user_id = 1; // Yii::$app->user->id
+            $formModel->scenario =  $post['scenario'];
+
+            if ($formModel->validate()) {
+                $service = Yii::$app->getModule('meetings')->get('updateAndSubmitForModerationService');
+                $question = $service->run($formModel);
+                return $this->redirect(['view', 'id' => $question->id]);
+            }
+        }
+
+        $subsidiary = Subsidiary::find()->select(['name'])->indexBy('id')->column();
+
+        return $this->render('update', [
+            'formModel' => $formModel,
+            'subsidiary' => $subsidiary,
+        ]);
     }
 
     /**
      * Модерация постановочного вопроса
      */
-    public function actionModeration() {}
+    public function actionModeration(int $id)
+    {
+        $question = $this->findModel($id);
 
-    /**
-     * Редактирование постановочного вопроса
-     */
-    public function actionUpdate(int $id) {}
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($id, 1)) {
+            throw new ForbiddenHttpException('Доступ запрещен');
+        }
+        return $this->render('moderation', [
+            'question' => $question,
+        ]);
+    }
+
     /**
      * Просмотр постановочного вопроса
      */
     public function actionView(int $id)
     {
-        $question = MeetingQuestion::findOne($id);
+        $question = $this->findModel($id);
 
-        if ($question === null) {
-            throw new NotFoundHttpException('Постановочный вопрос не найден');
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canView($id, 1)) {
+            throw new ForbiddenHttpException('Доступ запрещен');
         }
         return $this->render('view', [
             'question' => $question,
@@ -60,9 +126,39 @@ class MeetingQuestionController extends Controller
     /**
      * Удаление постановочного вопроса
      */
-    public function actionDelete(int $id) {}
+    public function actionDelete(int $id)
+    {
+        // ПРОБЛЕМА !!!
+        // Удаление происходит по GET - параметру !
+        // dump(Yii::$app->request->get());
+        // die;
+
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($id, 1)) {
+            throw new ForbiddenHttpException('Доступ запрещен');
+        }
+
+        $question = $this->findModel($id);
+
+        if (CommentQuestions::find()->where(['question_id' => $id])->count() != 0) {
+            Yii::$app->session->setFlash('error', 'Перед удалением постановочного вопроса необходимо удалить все ответы');
+            return $this->redirect(Yii::$app->request->referrer ?: ['meeting-question/view', 'id' => $question->id]);
+        }
+
+        if ($question->delete()) {
+            Yii::$app->session->setFlash('success', 'Постановочный вопрос удален');
+        }
+        return $this->redirect(['meetings/view', 'id' => $question->meeting->id]);
+    }
     /**
      * Возвращает вопрос на доработку
      */
     public function actionRework(int $id) {}
+
+    private function findModel(int $id): MeetingQuestion
+    {
+        if (($model = MeetingQuestion::findOne($id)) !== null) {
+            return $model;
+        }
+        throw new \yii\web\NotFoundHttpException('Постановочный вопрос не найден');
+    }
 }
