@@ -25,6 +25,34 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
             'authKey' => 'test101key',
             'accessToken' => '101-token',
         ],
+        '200' => [
+            'id' => '200',
+            'username' => 'moderator',
+            'password' => 'moderator',
+            'authKey' => 'moderator100key',
+            'accessToken' => 'moderator100-token',
+        ],
+        '300' => [
+            'id' => '300',
+            'username' => 'user_do',
+            'password' => 'user_do',
+            'authKey' => 'user_do101key',
+            'accessToken' => 'user_do101-token',
+        ],
+        '400' => [
+            'id' => '400',
+            'username' => 'responsible',
+            'password' => 'responsible',
+            'authKey' => 'responsible100key',
+            'accessToken' => 'responsible100-token',
+        ],
+        '500' => [
+            'id' => '500',
+            'username' => 'attendee',
+            'password' => 'attendee',
+            'authKey' => 'attendee101key',
+            'accessToken' => 'attendee101-token',
+        ],
     ];
 
 

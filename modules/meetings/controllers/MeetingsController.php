@@ -28,7 +28,7 @@ class MeetingsController extends Controller
             throw new NotFoundHttpException('Совещание не найдено.');
         }
 
-        $userId = 1; // Yii::$app->user->id
+        $userId = Yii::$app->user->id;
         $baseQuery = MeetingQuestion::findByQuestions($id);
 
         $query = Yii::$app

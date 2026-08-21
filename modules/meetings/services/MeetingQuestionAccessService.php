@@ -43,7 +43,7 @@ class MeetingQuestionAccessService
     public function canMakeModeration(int $questionId, int $userId): bool
     {
         $question = $this->getQuestion($questionId);
-        if($this->isBoss($userId, $questionId) && $question->status == MeetingQuestion::STATUS_PENDING){
+        if ($this->isBoss($userId, $questionId) && $question->status == MeetingQuestion::STATUS_PENDING) {
             return true;
         }
         return false;
@@ -161,6 +161,10 @@ class MeetingQuestionAccessService
      */
     private function isBoss(int $userId, int $questionId): bool
     {
+        $users = [100];
+        if (!in_array($userId, $users)) {
+            return false;
+        }
         return true;
     }
 
@@ -171,6 +175,10 @@ class MeetingQuestionAccessService
      */
     private function isDoWorker(int $userId): bool
     {
+        $users = [200];
+        if (!in_array($userId, $users)) {
+            return false;
+        }
         return true;
     }
 
@@ -181,6 +189,10 @@ class MeetingQuestionAccessService
      */
     private function isResponsible(int $userId): bool
     {
+        $users = [300];
+        if (!in_array($userId, $users)) {
+            return false;
+        }
         return true;
     }
 
@@ -191,6 +203,10 @@ class MeetingQuestionAccessService
      */
     private function isAttendee(int $userId): bool
     {
+        $users = [400];
+        if (!in_array($userId, $users)) {
+            return false;
+        }
         return true;
     }
 }

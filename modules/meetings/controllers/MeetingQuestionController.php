@@ -10,7 +10,6 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
-use yii\web\NotFoundHttpException;
 
 class MeetingQuestionController extends Controller
 {
