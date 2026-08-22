@@ -48,6 +48,7 @@ class MeetingsController extends Controller
         $dataProvider = new ActiveDataProvider(['query' => $query]);
 
         return $this->render('view', [
+            'userId' => $userId,
             'meeting' => $meeting,
             'dataProviderQuestion' => $dataProvider,
         ]);

@@ -2,6 +2,7 @@
 
 /**
  * @var app\modules\meetings\models\Meeting $meeting 
+ * @var int $userId
  * @var yii\data\ActiveDataProvider $dataProviderQuestion 
  */
 
@@ -65,8 +66,8 @@ use yii\helpers\Html;
             'class'      => 'yii\grid\ActionColumn',
             'template'   => '{view}{update}{delete}{moderate}',
             'buttons' => [
-                'view' => function ($url, $model, $key) {
-                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canView($model->id, 1)) {
+                'view' => function ($url, $model, $key) use ($userId) {
+                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canView($model->id, $userId)) {
                         return Html::a(Icon::show('eye'), ['meeting-question/view', 'id' => $model->id], [
                             'class' => '',
                             'title' => 'Просмотр',
@@ -74,8 +75,8 @@ use yii\helpers\Html;
                     }
                     return '<span class="text-muted">' . Icon::show('eye') . '</span>';
                 },
-                'update' =>  function ($url, $model, $key) {
-                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($model->id, 1)) {
+                'update' =>  function ($url, $model, $key) use ($userId) {
+                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($model->id, $userId)) {
                         return Html::a(Icon::show('pencil'), ['meeting-question/update', 'id' => $model->id], [
                             'class' => '',
                             'title' => 'Редактирование',
@@ -83,8 +84,8 @@ use yii\helpers\Html;
                     }
                     return '<span class="text-muted">' . Icon::show('pencil') . '</span>';
                 },
-                'delete' =>  function ($url, $model, $key) {
-                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($model->id, 1)) {
+                'delete' =>  function ($url, $model, $key) use ($userId) {
+                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($model->id, $userId)) {
                         return Html::a(Icon::show('trash'), ['meeting-question/delete', 'id' => $model->id], [
                             'class' => '',
                             'title' => 'Удаление',
@@ -94,8 +95,8 @@ use yii\helpers\Html;
                     }
                     return '<span class="text-muted">' . Icon::show('trash') . '</span>';
                 },
-                'moderate' =>  function ($url, $model, $key) {
-                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($model->id, 1)) {
+                'moderate' =>  function ($url, $model, $key) use ($userId) {
+                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($model->id, $userId)) {
                         return Html::a(Icon::show('triangle-exclamation'), ['meeting-question/moderation', 'id' => $model->id], [
                             'class' => 'text-danger',
                             'title' => 'Вопрос ожидает Вашей модерации',
