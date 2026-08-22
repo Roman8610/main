@@ -161,7 +161,7 @@ class MeetingQuestionAccessService
      */
     private function isBoss(int $userId, int $questionId): bool
     {
-        $users = [100];
+        $users = [200];
         if (!in_array($userId, $users)) {
             return false;
         }
@@ -175,7 +175,7 @@ class MeetingQuestionAccessService
      */
     private function isDoWorker(int $userId): bool
     {
-        $users = [200];
+        $users = [300];
         if (!in_array($userId, $users)) {
             return false;
         }
@@ -189,7 +189,7 @@ class MeetingQuestionAccessService
      */
     private function isResponsible(int $userId): bool
     {
-        $users = [300];
+        $users = [400];
         if (!in_array($userId, $users)) {
             return false;
         }
@@ -203,7 +203,7 @@ class MeetingQuestionAccessService
      */
     private function isAttendee(int $userId): bool
     {
-        $users = [400];
+        $users = [500];
         if (!in_array($userId, $users)) {
             return false;
         }

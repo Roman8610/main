@@ -14,6 +14,10 @@ class MeetingsController extends Controller
 {
     public function actionIndex()
     {
+        // Временная проверка потом убрать
+        if (!Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException('Вы не авторизованы.');
+        }
         $modelSearch = new MeetingSearch();
         $dataProvider = $modelSearch->search();
         return $this->render('index', [
@@ -26,6 +30,11 @@ class MeetingsController extends Controller
         $meeting = Meeting::findOne($id);
         if ($meeting === null) {
             throw new NotFoundHttpException('Совещание не найдено.');
+        }
+
+        // Временная проверка потом убрать
+        if (!Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException('Вы не авторизованы.');
         }
 
         $userId = Yii::$app->user->id;

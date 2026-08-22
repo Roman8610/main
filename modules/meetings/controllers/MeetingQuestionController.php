@@ -35,7 +35,8 @@ class MeetingQuestionController extends Controller
      */
     public function actionCreate(int $id)
     {
-        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreate($id, 1)) {
+        $userId = Yii::$app->user->id;
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreate($id, $userId)) {
             throw new ForbiddenHttpException('Доступ запрещен');
         }
 
@@ -45,7 +46,7 @@ class MeetingQuestionController extends Controller
 
         if ($formModel->load($post)) {
             $formModel->meeting_id = $id;
-            $formModel->user_id = 1; // Yii::$app->user->id
+            $formModel->user_id = $userId;
             $formModel->scenario =  $post['scenario'];
 
             if ($formModel->validate()) {
