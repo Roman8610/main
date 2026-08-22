@@ -114,11 +114,13 @@ class MeetingQuestionController extends Controller
      */
     public function actionView(int $id)
     {
-        $question = $this->findModel($id);
-
-        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canView($id, 1)) {
+        $userId = Yii::$app->user->id;
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canView($id, $userId)) {
             throw new ForbiddenHttpException('Доступ запрещен');
         }
+
+        $question = $this->findModel($id);
+
         return $this->render('view', [
             'question' => $question,
         ]);

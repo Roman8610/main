@@ -23,10 +23,10 @@ use yii\helpers\Html;
             'header' => '#',
         ],
         [
-            'attribute' => 'question_text',
-            'header' => 'Постановочный вопрос',
+            'attribute' => 'name',
+            'header' => 'Название',
             'value' => function ($model) {
-                return Html::a($model->question_text, ['meeting-question/view', 'id' => $model->id]);
+                return Html::a($model->name, ['meeting-question/view', 'id' => $model->id]);
             },
             'format' => 'html',
         ],

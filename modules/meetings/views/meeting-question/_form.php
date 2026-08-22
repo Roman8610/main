@@ -12,12 +12,12 @@ use yii\helpers\Html;
 $form = ActiveForm::begin(); ?>
 <div class="row">
     <div class="col-md-12">
-        <?= $form->field($formModel, 'name', ['template' => "{label}\n<span class=\"required\" style=\"color: red;\">*</span>\n{input}\n{error}"])->textInput(['maxlength' => true]); ?>
+        <?= $form->field($formModel, 'name')->textInput(['maxlength' => true]); ?>
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <?= $form->field($formModel, 'question_text', ['template' => "{label}\n<span class=\"required\" style=\"color: red;\">*</span>\n{input}\n{error}"])->textarea(['rows' => 6]); ?>
+        <?= $form->field($formModel, 'question_text')->textarea(['rows' => 6]); ?>
     </div>
 </div>
 <div class="row">

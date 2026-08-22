@@ -12,8 +12,8 @@ class MeetingQuestionAccessService
 {
     /**
      * Проверяет может ли пользователь создать вопрос в совещании
-     * @param int $meeting_id
-     * @param int $user_id
+     * @param int $meetingId
+     * @param int $userId
      * @return bool
      */
     public function canCreate(int $meetingId, int $userId): bool
