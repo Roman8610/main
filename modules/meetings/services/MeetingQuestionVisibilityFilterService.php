@@ -45,7 +45,10 @@ class MeetingQuestionVisibilityFilterService
             return $query;
         }
 
-        if (in_array(MeetingRole::MODERATOR->value, $rolesArray)) {
+        if(in_array(MeetingRole::ADMIN->value, $rolesArray)){
+            // Если пользователь является администратором, то базовый запрос остается без изменений
+            // Все вопросы будут видны
+        }elseif (in_array(MeetingRole::MODERATOR->value, $rolesArray)) {
             $query->andWhere([
                 'or',
                 ['<>', 'status', MeetingQuestion::STATUS_DRAFT],

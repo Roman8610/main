@@ -26,7 +26,7 @@ class MeetingsController extends Controller
     }
 
     public function actionView(int $id)
-    {
+    { 
         $meeting = Meeting::findOne($id);
         if ($meeting === null) {
             throw new NotFoundHttpException('Совещание не найдено.');
