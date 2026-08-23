@@ -4,6 +4,7 @@ namespace app\modules\meetings\enums;
 
 enum MeetingRole: string
 {
+    case ADMIN = 'admin';
     case MODERATOR = 'moderator';
     case USER_DO   = 'user_do';
     case ATTENDEE  = 'attendee';

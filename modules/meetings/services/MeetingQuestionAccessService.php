@@ -75,6 +75,7 @@ class MeetingQuestionAccessService
 
     /**
      * Проверяет может ли пользователь просматривать вопрос
+     * Администратор может просматривать все вопросы
      * Вопросы со статусом {@see MeetingQuestion::STATUS_DRAFT} может просматривать только собственник вопроса
      * Вопросы со статусом {@see MeetingQuestion::STATUS_PENDING} может просматривать собственник вопроса и модератор
      * Вопросы со статусом {@see MeetingQuestion::STATUS_PUBLISHED} может просматривать собственник вопроса, модератор, сотрудник дочернего общества, участник совещания
@@ -110,6 +111,9 @@ class MeetingQuestionAccessService
     public function getRoles(int $meetingId, int $userId): array
     {
         $roles = [];
+        if ($this->isAdmin($userId, $meetingId)) {
+            $roles[] = MeetingRole::ADMIN->value;
+        }
         if ($this->isBoss($userId, $meetingId)) {
             $roles[] = MeetingRole::MODERATOR->value;
         }
@@ -151,6 +155,21 @@ class MeetingQuestionAccessService
             throw new NotFoundHttpException('Совещание не найдено');
         }
         return $meeting;
+    }
+
+    /**
+     * Проверяем является ли пользователь админостратором
+     * @param int $userId Идентификатор пользователя
+     * @param int $questionId Идентификатор вопроса
+     * @return bool
+     */
+    private function isAdmin(int $userId, int $questionId): bool
+    {
+        $users = [666];
+        if (!in_array($userId, $users)) {
+            return false;
+        }
+        return true;
     }
 
     /**
