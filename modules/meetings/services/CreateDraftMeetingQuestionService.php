@@ -23,7 +23,7 @@ class CreateDraftMeetingQuestionService
         $question->name = $formModel->name; // Название вопроса
         $question->question_text = $formModel->question_text; // Текст вопроса
         $question->decision = $formModel->decision; // Предлагаемое решение вопроса
-        $question->commet = $formModel->comment; // Комментарий 
+        $question->comment = $formModel->comment; // Комментарий 
         $question->deadline = $formModel->deadline; // Срок выполнения
         $question->created_at = date('Y-m-d H:i:s'); // Дата создания
         $question->updated_at = null; // Дата последнего обновления

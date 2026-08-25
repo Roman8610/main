@@ -19,7 +19,7 @@ class MeetingQuestionAccessService
     public function canCreate(int $meetingId, int $userId): bool
     {
         $meeting = $this->getMeeting($meetingId);
-        if ($this->isBoss($userId, $meeting->id) || $this->isDoWorker($userId) || $this->isResponsible($userId) || $this->isAttendee($userId)) {
+        if ($this->isAdmin($userId, $meeting->id) || $this->isBoss($userId, $meeting->id) || $this->isDoWorker($userId) || $this->isResponsible($userId) || $this->isAttendee($userId)) {
             return true;
         }
         return false;
