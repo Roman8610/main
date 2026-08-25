@@ -66,7 +66,8 @@ class MeetingQuestionController extends Controller
      */
     public function actionUpdate(int $id)
     {
-        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($id, 1)) {
+        $userId = Yii::$app->user->id;
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($id, $userId)) {
             throw new ForbiddenHttpException('Доступ запрещен');
         }
         $formModel = new MeetingQuestionForm();
@@ -76,12 +77,12 @@ class MeetingQuestionController extends Controller
         $post = Yii::$app->request->post();
         if ($formModel->load($post)) {
             $formModel->id = $id;
-            $formModel->user_id = 1; // Yii::$app->user->id
+            $formModel->user_id = $userId;
             $formModel->scenario =  $post['scenario'];
 
             if ($formModel->validate()) {
                 $service = Yii::$app->getModule('meetings')->get('updateAndSubmitForModerationService');
-                $question = $service->run($formModel);
+                $question = $service->run($question, $formModel);
                 return $this->redirect(['view', 'id' => $question->id]);
             }
         }

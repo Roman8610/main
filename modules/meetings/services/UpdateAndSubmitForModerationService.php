@@ -9,14 +9,14 @@ use Yii;
 class UpdateAndSubmitForModerationService
 {
 
-    public function run(MeetingQuestionForm $formModel): MeetingQuestion
+    public function run(MeetingQuestion $question, MeetingQuestionForm $formModel): MeetingQuestion
     {
-        $updateDraft = Yii::$app->getModule('meetings')->get('updateDraftMeetingQuestionService');
-        $question = $updateDraft->run($formModel);
+        $updateService = Yii::$app->getModule('meetings')->get('updateDraftMeetingQuestionService');
+        $question = $updateService->run($question, $formModel);
 
-        if ($formModel->scenario == 'submit_pending') {
-            $submitPending = Yii::$app->getModule('meetings')->get('submitForModerationService');
-            $question = $submitPending->run($question);
+        if ($formModel->scenario === 'submit_pending') {
+            $submitService = Yii::$app->getModule('meetings')->get('submitForModerationService');
+            $question = $submitService->run($question);
         }
 
         return $question;

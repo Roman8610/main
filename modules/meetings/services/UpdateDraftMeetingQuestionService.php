@@ -10,16 +10,15 @@ use yii\web\ForbiddenHttpException;
 
 class UpdateDraftMeetingQuestionService
 {
-    public function run(MeetingQuestionForm $formModel): MeetingQuestion
+    public function run(MeetingQuestion $question, MeetingQuestionForm $formModel): MeetingQuestion
     {
-        $question = $this->findModel($formModel->id);
-
-        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, 1)) {
-            throw new ForbiddenHttpException('Доступ запрещен');
+        // Права уже проверены в контроллере; если хочешь дублирующую защиту — делай её корректно:
+        $accessService = Yii::$app->getModule('meetings')->get('meetingQuestionAccessService');
+        if (!$accessService->canUpdate($question->id, $formModel->user_id)) {
+            throw new ForbiddenHttpException('Доступ запрещён');
         }
 
-        $formModel->loadFromQuestion($question);
-
+        // Копируем только нужные поля из формы в AR
         $question->name = $formModel->name;
         $question->question_text = $formModel->question_text;
         $question->decision = $formModel->decision;
@@ -28,34 +27,29 @@ class UpdateDraftMeetingQuestionService
         $question->updated_at = date('Y-m-d H:i:s');
         $question->updated_by = $formModel->user_id;
 
-        if (!$question->save(false)) {
-            throw new \yii\base\Exception(
-                'Не удалось сохранить вопрос: ' . json_encode($question->getErrors())
-            );
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$question->save()) {
+                throw new \Exception('Не удалось сохранить вопрос: ' . json_encode($question->getErrors()));
+            }
+
+            RecipientsQuestions::deleteAll(['question_id' => $question->id]);
+
+            $recipientsArray = array_map(fn($item) => [$question->id, $item], $formModel->recipients);
+            if (!empty($recipientsArray)) {
+                Yii::$app->db->createCommand()->batchInsert(
+                    RecipientsQuestions::tableName(),
+                    ['question_id', 'subsidiary_id'],
+                    $recipientsArray
+                )->execute();
+            }
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
         }
 
-        RecipientsQuestions::deleteAll(['question_id' => $question->id]);
-
-        $recipients_array = array_map(function ($item) use ($question) {
-            return [$question->id, $item];
-        }, $formModel->recipients);
-
-        // Сохраняем получателей вопроса 
-        Yii::$app->db->createCommand()->batchInsert(
-            RecipientsQuestions::tableName(),
-            ['question_id', 'subsidiary_id'],
-            $recipients_array
-        )->execute();
-
-        return $question;
-    }
-
-    private function findModel(int $id): MeetingQuestion
-    {
-        $question = MeetingQuestion::findOne($id);
-        if ($question === null) {
-            throw new \yii\web\NotFoundHttpException('Постановочный вопрос не найден');
-        }
         return $question;
     }
 }

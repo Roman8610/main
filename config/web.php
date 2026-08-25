@@ -5,6 +5,8 @@ use app\modules\meetings\services\CreateDraftMeetingQuestionService;
 use app\modules\meetings\services\MeetingQuestionAccessService;
 use app\modules\meetings\services\MeetingQuestionVisibilityFilterService;
 use app\modules\meetings\services\SubmitForModerationService;
+use app\modules\meetings\services\UpdateAndSubmitForModerationService;
+use app\modules\meetings\services\UpdateDraftMeetingQuestionService;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -31,6 +33,12 @@ $config = [
                 ],
                 'meetingQuestionVisibilityFilterService' => [
                     'class' => MeetingQuestionVisibilityFilterService::class,
+                ],
+                'updateAndSubmitForModerationService' => [
+                    'class' => UpdateAndSubmitForModerationService::class,
+                ],
+                 'updateDraftMeetingQuestionService' => [
+                    'class' => UpdateDraftMeetingQuestionService::class,
                 ],
             ]
         ],
