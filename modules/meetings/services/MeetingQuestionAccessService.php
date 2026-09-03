@@ -55,7 +55,7 @@ class MeetingQuestionAccessService
     public function canUpdate(int $questionId, int $userId): bool
     {
         $question = $this->getQuestion($questionId);
-        if ($question->created_by == $userId && $question->status != MeetingQuestion::STATUS_PUBLISHED) {
+        if ($question->created_by == $userId && $question->status != MeetingQuestion::STATUS_PUBLISHED && $question->status != MeetingQuestion::STATUS_PENDING) {
             return true;
         }
         return false;
@@ -67,7 +67,7 @@ class MeetingQuestionAccessService
     public function canDelete(int $questionId, int $userId): bool
     {
         $question = $this->getQuestion($questionId);
-        if ($question->created_by == $userId) {
+        if ($question->created_by == $userId && $question->status != MeetingQuestion::STATUS_PENDING) {
             return true;
         }
         return false;
