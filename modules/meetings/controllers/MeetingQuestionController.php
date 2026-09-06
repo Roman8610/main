@@ -138,21 +138,23 @@ class MeetingQuestionController extends Controller
         // dump(Yii::$app->request->get());
         // die;
 
-        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($id, 1)) {
+        $userId = Yii::$app->user->id;
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($id, $userId)) {
             throw new ForbiddenHttpException('Доступ запрещен');
         }
 
-        $question = $this->findModel($id);
-
         if (CommentQuestions::find()->where(['question_id' => $id])->count() != 0) {
             Yii::$app->session->setFlash('error', 'Перед удалением постановочного вопроса необходимо удалить все ответы');
-            return $this->redirect(Yii::$app->request->referrer ?: ['meeting-question/view', 'id' => $question->id]);
+            return $this->redirect(Yii::$app->request->referrer ?: ['meeting-question/view', 'id' => $id]);
         }
 
-        if ($question->delete()) {
+        if (Yii::$app->getModule('meetings')->get('deleteQuestionService')->run($id)) {
             Yii::$app->session->setFlash('success', 'Постановочный вопрос удален');
+            return $this->redirect(['meetings/meetings']);
         }
-        return $this->redirect(['meetings/view', 'id' => $question->meeting->id]);
+
+        return $this->redirect(Yii::$app->request->referrer ?: ['meeting-question/view', 'id' => $id]);
+        
     }
     /**
      * Возвращает вопрос на доработку

@@ -19,3 +19,5 @@ MeetingQuestionVisibilityService — не меняет статус, но реш
 MeetingQuestionAccessService — расширяет предыдущий: проверяет не только на просмотр, но и на право редактирования/изменения статуса в конкретном статусе.
 
 СreateAndSubmitForModerationService - Оркестратор. Последовательный вызов CreateMeetingQuestionService и SubmitForModerationService. Создает вопрос со статусом «Черновик» и сразу меняет статус на «На модерации».
+
+DeleteQuestionService - Удаляет постановочный вопрос

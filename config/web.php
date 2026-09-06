@@ -2,6 +2,7 @@
 
 use app\modules\meetings\services\CreateAndSubmitForModerationService;
 use app\modules\meetings\services\CreateDraftMeetingQuestionService;
+use app\modules\meetings\services\DeleteQuestionService;
 use app\modules\meetings\services\MeetingQuestionAccessService;
 use app\modules\meetings\services\MeetingQuestionVisibilityFilterService;
 use app\modules\meetings\services\SubmitForModerationService;
@@ -37,8 +38,11 @@ $config = [
                 'updateAndSubmitForModerationService' => [
                     'class' => UpdateAndSubmitForModerationService::class,
                 ],
-                 'updateDraftMeetingQuestionService' => [
+                'updateDraftMeetingQuestionService' => [
                     'class' => UpdateDraftMeetingQuestionService::class,
+                ],
+                'deleteQuestionService' => [
+                    'class' => DeleteQuestionService::class,
                 ],
             ]
         ],
