@@ -5,6 +5,7 @@ namespace app\modules\meetings\services;
 use app\modules\meetings\forms\MeetingQuestionForm;
 use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\models\RecipientsQuestions;
+use Exception;
 use Yii;
 
 class CreateDraftMeetingQuestionService
@@ -31,24 +32,26 @@ class CreateDraftMeetingQuestionService
         $question->updated_by = null; // кто внес последние изменения
         $question->status = MeetingQuestion::STATUS_DRAFT; // статус
 
-        if ($question->save(false)) {
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$question->save(false)) {
+                throw new \Exception('Не удалось сохранить вопрос: ' . json_encode($question->getErrors()));
+            }
             $question_id = $question->id;
-        } else {
-            $errors = $question->getErrors();
-            Yii::$app->session->setFlash('error', 'Не удалось сохранить вопрос: ' . json_encode($errors));
+            $recipients_array = array_map(function ($item) use ($question_id) {
+                return [$question_id, $item];
+            }, $formModel->recipients);
+            // Сохраняем получателей вопроса 
+            Yii::$app->db->createCommand()->batchInsert(
+                RecipientsQuestions::tableName(),
+                ['question_id', 'subsidiary_id'],
+                $recipients_array
+            )->execute();
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw $e;
         }
-
-        $recipients_array = array_map(function ($item) use ($question_id) {
-            return [$question_id, $item];
-        }, $formModel->recipients);
-
-        // Сохраняем получателей вопроса 
-        Yii::$app->db->createCommand()->batchInsert(
-            RecipientsQuestions::tableName(),
-            ['question_id', 'subsidiary_id'],
-            $recipients_array
-        )->execute();
-
         return $question;
     }
     /**

@@ -72,6 +72,8 @@ class MeetingQuestionController extends Controller
         }
         $formModel = new MeetingQuestionForm();
         $question = $this->findModel($id);
+
+        // Заполнем модель , чтобы пользователь получил форму с данными.
         $formModel->loadFromQuestion($question);
 
         $post = Yii::$app->request->post();

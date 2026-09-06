@@ -12,7 +12,7 @@ class UpdateDraftMeetingQuestionService
 {
     public function run(MeetingQuestion $question, MeetingQuestionForm $formModel): MeetingQuestion
     {
-        // Права уже проверены в контроллере; если хочешь дублирующую защиту — делай её корректно:
+        // Права уже проверены в контроллере, но необходимо дублирование защиты на случай обращения к сервису не из контроллера
         $accessService = Yii::$app->getModule('meetings')->get('meetingQuestionAccessService');
         if (!$accessService->canUpdate($question->id, $formModel->user_id)) {
             throw new ForbiddenHttpException('Доступ запрещён');
