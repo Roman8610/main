@@ -53,12 +53,12 @@ class MeetingQuestionForm extends \yii\base\Model
         ];
     }
 
-    public function loadFromQuestion(MeetingQuestion $question):void
+    public function loadFromQuestion(MeetingQuestion $question): void
     {
         $this->setAttributes($question->attributes);
-        
-        // $this->recipients = [
-        //     1 => 'ГД Астрахань',
-        // ];
+
+        $this->recipients = $question->getRecipients()
+            ->select(['subsidiary_id'])
+            ->column();
     }
 }

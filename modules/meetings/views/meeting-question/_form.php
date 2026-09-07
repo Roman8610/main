@@ -22,7 +22,7 @@ $form = ActiveForm::begin(); ?>
 </div>
 <div class="row">
     <div class="col-md-12 subsidary-input">
-        <?= $form->field($formModel, 'recipients[]')->widget(Select2::class, [
+        <?= $form->field($formModel, 'recipients')->widget(Select2::class, [
             'data' => $subsidiary,
             'options' => [
                 'placeholder' => 'Выберите адресатов...',
