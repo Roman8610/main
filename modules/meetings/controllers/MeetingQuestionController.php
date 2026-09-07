@@ -8,6 +8,7 @@ use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\models\Subsidiary;
 use Yii;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 
@@ -131,12 +132,13 @@ class MeetingQuestionController extends Controller
     /**
      * Удаление постановочного вопроса
      */
-    public function actionDelete(int $id)
+    public function actionDelete()
     {
-        // ПРОБЛЕМА !!!
-        // Удаление происходит по GET - параметру !
-        // dump(Yii::$app->request->get());
-        // die;
+        $id = Yii::$app->request->post('id');
+        if ($id === null || filter_var($id, FILTER_VALIDATE_INT) === false || (int) $id < 1) {
+            throw new BadRequestHttpException('Некорректный идентификатор вопроса');
+        }
+        $id = (int) $id;
 
         $userId = Yii::$app->user->id;
         if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($id, $userId)) {
@@ -150,11 +152,10 @@ class MeetingQuestionController extends Controller
 
         if (Yii::$app->getModule('meetings')->get('deleteQuestionService')->run($id)) {
             Yii::$app->session->setFlash('success', 'Постановочный вопрос удален');
-            return $this->redirect(['meetings/meetings']);
+            return $this->redirect(['/meetings/meetings']);
         }
 
         return $this->redirect(Yii::$app->request->referrer ?: ['meeting-question/view', 'id' => $id]);
-        
     }
     /**
      * Возвращает вопрос на доработку

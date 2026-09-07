@@ -86,12 +86,15 @@ use yii\helpers\Html;
                 },
                 'delete' =>  function ($url, $model, $key) use ($userId) {
                     if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($model->id, $userId)) {
-                        return Html::a(Icon::show('trash'), ['meeting-question/delete', 'id' => $model->id], [
-                            'class' => '',
-                            'title' => 'Удаление',
-                            'data-confirm' => 'Вы уверены, что хотите удалить эту запись?',
-                            'data-method' => 'post',
-                        ]);
+                        return Html::beginForm(['meeting-question/delete'], 'post', ['style' => 'display: inline'])
+                            . Html::hiddenInput('id', $model->id)
+                            . Html::submitButton(Icon::show('trash'), [
+                                'class' => 'btn btn-link p-0 border-0 text-primary',
+                                'title' => 'Удаление',
+                                'encode' => false,
+                                'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
+                            ])
+                            . Html::endForm();
                     }
                     return '<span class="text-muted">' . Icon::show('trash') . '</span>';
                 },
