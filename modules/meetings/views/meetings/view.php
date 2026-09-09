@@ -40,10 +40,11 @@ use yii\helpers\Html;
             'format' => 'html',
         ],
         [
-            'label' => 'Отправитель вопроса',
+            'label' => 'Автор вопроса',
+            'attribute' => 'created_by',
         ],
         [
-            'label' => 'Получатель вопроса',
+            'label' => 'Получатели вопроса',
         ],
         [
             'attribute' => 'status',
