@@ -3,6 +3,7 @@
 namespace app\modules\meetings\controllers;
 
 use app\modules\meetings\forms\MeetingQuestionForm;
+use app\modules\meetings\forms\ModerationQuestionForm;
 use app\modules\meetings\models\CommentQuestions;
 use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\models\Subsidiary;
@@ -104,11 +105,16 @@ class MeetingQuestionController extends Controller
     public function actionModeration(int $id)
     {
         $question = $this->findModel($id);
+        $userId = Yii::$app->user->id;
 
-        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($id, 1)) {
+        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($id, $userId)) {
             throw new ForbiddenHttpException('Доступ запрещен');
         }
+
+        $formModel = new ModerationQuestionForm();
+
         return $this->render('moderation', [
+            'formModel' => $formModel,
             'question' => $question,
         ]);
     }

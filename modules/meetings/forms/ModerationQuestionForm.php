@@ -11,8 +11,8 @@ use Override;
 
 class ModerationQuestionForm extends \yii\base\Model
 {
-    public array $departments;
-    public array $directions;
+    public array $departments = [];
+    public $directions;
     public string $comment_moderator;
    
     #[Override]
@@ -21,7 +21,6 @@ class ModerationQuestionForm extends \yii\base\Model
         return [
             [['departments', 'directions'], 'required'],
             [['recipients'], 'each', 'rule' => ['integer']],
-            [['directions'], 'each', 'rule' => ['string']],
             [['comment_moderator'], 'string'],
         ];
     }
