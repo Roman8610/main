@@ -9,6 +9,7 @@
 use app\modules\meetings\models\MeetingQuestion;
 use kartik\icons\Icon;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 ?>
 
@@ -45,6 +46,12 @@ use yii\helpers\Html;
         ],
         [
             'label' => 'Получатели вопроса',
+            'value' => function ($model) {
+                $recipients = ArrayHelper::getColumn($model->recipients, 'subsidiary.name');
+
+                return $recipients ? implode('<br>', $recipients) : '—';
+            },
+            'format' => 'html',
         ],
         [
             'attribute' => 'status',

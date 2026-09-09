@@ -45,6 +45,8 @@ class MeetingsController extends Controller
             ->get('meetingQuestionVisibilityFilterService')
             ->applyVisibilityConditions($baseQuery, $userId, $id);
 
+        $query->with(['recipients.subsidiary']);
+
         $dataProvider = new ActiveDataProvider(['query' => $query]);
 
         return $this->render('view', [

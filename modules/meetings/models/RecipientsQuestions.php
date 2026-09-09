@@ -10,4 +10,9 @@ class RecipientsQuestions extends ActiveRecord
     {
         return 'recipients_questions';
     }
+
+    public function getSubsidiary()
+    {
+        return $this->hasOne(Subsidiary::class, ['id' => 'subsidiary_id']);
+    }
 }
