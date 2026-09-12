@@ -5,6 +5,7 @@ use app\modules\meetings\services\CreateDraftMeetingQuestionService;
 use app\modules\meetings\services\DeleteQuestionService;
 use app\modules\meetings\services\MeetingQuestionAccessService;
 use app\modules\meetings\services\MeetingQuestionVisibilityFilterService;
+use app\modules\meetings\services\OffPublishMeetingQuestionService;
 use app\modules\meetings\services\SubmitForModerationService;
 use app\modules\meetings\services\UpdateAndSubmitForModerationService;
 use app\modules\meetings\services\UpdateDraftMeetingQuestionService;
@@ -47,6 +48,9 @@ $config = [
                 ],
                 'publishMeetingQuestionService' =>[
                    'class' => PublishMeetingQuestionService::class,
+                ],
+                'offPublishMeetingQuestionService' =>[
+                    'class' => OffPublishMeetingQuestionService::class,
                 ],
             ]
         ],

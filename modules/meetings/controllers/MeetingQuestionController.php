@@ -3,6 +3,7 @@
 namespace app\modules\meetings\controllers;
 
 use app\modules\meetings\forms\MeetingQuestionForm;
+use app\modules\meetings\forms\OffPublishedMeetingQuestionForm;
 use app\modules\meetings\forms\PublishedMeetingQuestionModerationForm;
 use app\modules\meetings\forms\RejectMeetingQuestionModerationForm;
 use app\modules\meetings\models\CommentQuestions;
@@ -13,8 +14,6 @@ use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
-
-use function Psy\debug;
 
 class MeetingQuestionController extends Controller
 {
@@ -30,6 +29,7 @@ class MeetingQuestionController extends Controller
                         'delete' => ['POST'],
                         'publish' => ['POST'],
                         'reject' => ['POST'],
+                        'off' => ['POST'],
                     ],
                 ],
             ]
@@ -142,10 +142,30 @@ class MeetingQuestionController extends Controller
             // вызвать сервис публикации
             $service = Yii::$app->getModule('meetings')->get('publishMeetingQuestionService');
             $service->run($formModel);
- 
+
             // redirect
 
         }
+    }
+
+    /**
+     * Отвечает за снятие с публикации постановочного вопроса
+     */
+    public function actionOff()
+    {
+        $formModel = new OffPublishedMeetingQuestionForm();
+
+        if ($formModel->load(Yii::$app->request->post(), '') && $formModel->validate()) {
+            $userId = Yii::$app->user->id;
+            // проверить доступ
+            if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeOff($formModel->question_id, $userId)) {
+                throw new ForbiddenHttpException('Доступ запрещен');
+            }
+            // вызвать сервис публикации
+            $service = Yii::$app->getModule('meetings')->get('offPublishMeetingQuestionService');
+            $service->run($formModel);
+        }
+        return $this->redirect(Yii::$app->request->referrer ?: ['meetings']);
     }
 
     /**

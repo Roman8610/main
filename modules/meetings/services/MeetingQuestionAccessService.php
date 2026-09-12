@@ -42,14 +42,14 @@ class MeetingQuestionAccessService
     public function canMakeModeration(int $questionId, int $userId): bool
     {
         $question = $this->getQuestion($questionId);
-        if ($this->isBoss($userId, $questionId) && $question->status == MeetingQuestion::STATUS_PENDING) {
+        if ($this->isBoss($userId, $questionId) && ($question->status == MeetingQuestion::STATUS_PENDING || $question->status == MeetingQuestion::STATUS_REMOVED)) {
             return true;
         }
         return false;
     }
 
     /**
-     * Проверяет может ли пользователь выполнить модерацию
+     * Проверяет может ли пользователь снять вопрос с публикации
      */
     public function canMakeOff(int $questionId, int $userId): bool
     {
