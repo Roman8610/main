@@ -3,7 +3,8 @@
 namespace app\modules\meetings\controllers;
 
 use app\modules\meetings\forms\MeetingQuestionForm;
-use app\modules\meetings\forms\ModerationQuestionForm;
+use app\modules\meetings\forms\PublishedMeetingQuestionModerationForm;
+use app\modules\meetings\forms\RejectMeetingQuestionModerationForm;
 use app\modules\meetings\models\CommentQuestions;
 use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\models\Subsidiary;
@@ -12,6 +13,8 @@ use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
+
+use function Psy\debug;
 
 class MeetingQuestionController extends Controller
 {
@@ -25,6 +28,8 @@ class MeetingQuestionController extends Controller
                     'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
+                        'publish' => ['POST'],
+                        'reject' => ['POST'],
                     ],
                 ],
             ]
@@ -100,7 +105,7 @@ class MeetingQuestionController extends Controller
     }
 
     /**
-     * Модерация постановочного вопроса
+     * Отвечает за отображение страницы модерации постановочного вопроса
      */
     public function actionModeration(int $id)
     {
@@ -111,12 +116,50 @@ class MeetingQuestionController extends Controller
             throw new ForbiddenHttpException('Доступ запрещен');
         }
 
-        $formModel = new ModerationQuestionForm();
+        $formModelPublish = new PublishedMeetingQuestionModerationForm();
+        $formModelReject = new RejectMeetingQuestionModerationForm();
 
         return $this->render('moderation', [
-            'formModel' => $formModel,
+            'formModelPublish' => $formModelPublish,
+            'formModelReject' => $formModelReject,
             'question' => $question,
         ]);
+    }
+
+    /**
+     * Отвечает за публикацию постановочного вопроса
+     */
+    public function actionPublish()
+    {
+        $formModel = new PublishedMeetingQuestionModerationForm();
+
+        if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
+            $userId = Yii::$app->user->id;
+            // проверить доступ
+            if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($formModel->question_id, $userId)) {
+                throw new ForbiddenHttpException('Доступ запрещен');
+            }
+            // вызвать сервис публикации
+            $service = Yii::$app->getModule('meetings')->get('publishMeetingQuestionService');
+            $service->run($formModel);
+ 
+            // redirect
+
+        }
+    }
+
+    /**
+     * Отвечает за отклонение постановочного вопроса
+     */
+    public function actionReject()
+    {
+        echo "Отклонение вопроса";
+        die();
+        // проверить доступ
+        // загрузить RejectMeetingQuestionModerationForm
+        // провалидировать
+        // вызвать сервис отклонения
+        // redirect
     }
 
     /**
@@ -144,7 +187,6 @@ class MeetingQuestionController extends Controller
         if ($id === null || filter_var($id, FILTER_VALIDATE_INT) === false || (int) $id < 1) {
             throw new BadRequestHttpException('Некорректный идентификатор вопроса');
         }
-        $id = (int) $id;
 
         $userId = Yii::$app->user->id;
         if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($id, $userId)) {

@@ -54,20 +54,4 @@ class CreateDraftMeetingQuestionService
         }
         return $question;
     }
-    /**
-     * Сохранение вопроса
-     */
-    private function saveQuestion() {}
-    /**
-     * Сохранение получателей вопроса
-     */
-    private function saveRecipient() {}
-    /**
-     * Сохранение отделов
-     */
-    private function saveDepartment() {}
-    /**
-     * Сохранение направлений
-     */
-    private function saveDirection() {}
 }
