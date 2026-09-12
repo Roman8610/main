@@ -4,7 +4,6 @@ namespace app\modules\meetings\services;
 
 use app\modules\meetings\models\Meeting;
 use app\modules\meetings\models\MeetingQuestion;
-use Yii;
 use yii\web\NotFoundHttpException;
 use app\modules\meetings\enums\MeetingRole;
 
@@ -44,6 +43,18 @@ class MeetingQuestionAccessService
     {
         $question = $this->getQuestion($questionId);
         if ($this->isBoss($userId, $questionId) && $question->status == MeetingQuestion::STATUS_PENDING) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Проверяет может ли пользователь выполнить модерацию
+     */
+    public function canMakeOff(int $questionId, int $userId): bool
+    {
+        $question = $this->getQuestion($questionId);
+        if ($this->isBoss($userId, $questionId) && $question->status == MeetingQuestion::STATUS_PUBLISHED) {
             return true;
         }
         return false;

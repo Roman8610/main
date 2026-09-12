@@ -72,7 +72,7 @@ use yii\helpers\Html;
         ],
         [
             'class'      => 'yii\grid\ActionColumn',
-            'template'   => '{view}{update}{delete}{moderate}',
+            'template'   => '{view}{update}{delete}{moderate}{off}',
             'buttons' => [
                 'view' => function ($url, $model, $key) use ($userId) {
                     if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canView($model->id, $userId)) {
@@ -112,6 +112,19 @@ use yii\helpers\Html;
                             'class' => 'text-danger',
                             'title' => 'Вопрос ожидает Вашей модерации',
                         ]);
+                    }
+                },
+                'off' =>  function ($url, $model, $key) use ($userId) {
+                    if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeOff($model->id, $userId)) {
+                        return Html::beginForm(['meeting-question/off'], 'post', ['style' => 'display: inline'])
+                            . Html::hiddenInput('id', $model->id)
+                            . Html::submitButton(Icon::show('eye-slash'), [
+                                'class' => 'btn btn-link p-0 border-0 text-warning',
+                                'title' => 'Снять с публикации',
+                                'encode' => false,
+                                'onclick' => "return confirm('Вы уверены, что хотите снять с публикации эту запись?')",
+                            ])
+                            . Html::endForm();
                     }
                 },
             ],
