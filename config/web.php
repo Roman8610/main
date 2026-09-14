@@ -10,6 +10,7 @@ use app\modules\meetings\services\SubmitForModerationService;
 use app\modules\meetings\services\UpdateAndSubmitForModerationService;
 use app\modules\meetings\services\UpdateDraftMeetingQuestionService;
 use app\modules\meetings\services\PublishMeetingQuestionService;
+use app\modules\meetings\services\RejectMeetingQuestionService;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -51,6 +52,9 @@ $config = [
                 ],
                 'offPublishMeetingQuestionService' =>[
                     'class' => OffPublishMeetingQuestionService::class,
+                ],
+                'rejectMeetingQuestionService' => [
+                    'class' => RejectMeetingQuestionService::class,
                 ],
             ]
         ],

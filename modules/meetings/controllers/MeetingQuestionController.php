@@ -182,8 +182,22 @@ class MeetingQuestionController extends Controller
      */
     public function actionReject()
     {
-        echo "Отклонение вопроса";
-        die();
+        $formModel = new RejectMeetingQuestionModerationForm();
+
+        if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
+            $userId = Yii::$app->user->id;
+            // проверить доступ
+            if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($formModel->question_id, $userId)) {
+                throw new ForbiddenHttpException('Доступ запрещен');
+            }
+            // вызвать сервис публикации
+            $service = Yii::$app->getModule('meetings')->get('rejectMeetingQuestionService');
+            $service->run($formModel);
+
+            return $this->redirect(['meeting-question/view', 'id' => $formModel->question_id]);
+        }
+
+
         // проверить доступ
         // загрузить RejectMeetingQuestionModerationForm
         // провалидировать
