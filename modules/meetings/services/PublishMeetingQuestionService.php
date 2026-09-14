@@ -32,11 +32,13 @@ class PublishMeetingQuestionService
             $departments_array = array_map(function ($item) use ($question_id) {
                 return [$question_id, $item];
             }, $formModel->departments);
+            
+            DepartmentsQuestions::deleteAll(['question_id' => $question->id]);
             // Сохраняем отделы
             Yii::$app->db->createCommand()->batchInsert(
                 DepartmentsQuestions::tableName(),
                 ['question_id', 'departments_id'],
-                 $departments_array
+                $departments_array
             )->execute();
             $transaction->commit();
         } catch (Exception $e) {

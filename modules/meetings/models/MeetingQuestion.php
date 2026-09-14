@@ -57,4 +57,8 @@ class MeetingQuestion extends ActiveRecord
     public function getRecipients(){
         return $this->hasMany(RecipientsQuestions::class, ['question_id' => 'id']);
     }
+
+    public function getDepartments(){
+        return $this->hasMany(DepartmentsQuestions::class, ['question_id' => 'id']);
+    }
 }

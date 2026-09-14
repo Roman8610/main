@@ -116,8 +116,18 @@ class MeetingQuestionController extends Controller
             throw new ForbiddenHttpException('Доступ запрещен');
         }
 
+        $question = $this->findModel($id);
+
         $formModelPublish = new PublishedMeetingQuestionModerationForm();
         $formModelReject = new RejectMeetingQuestionModerationForm();
+
+        $formModelPublish->setAttributes($question->attributes);
+        $formModelPublish->departments = $question->getDepartments()
+            ->select(['departments_id'])
+            ->column();
+
+        $formModelReject->setAttributes($question->attributes);
+
 
         return $this->render('moderation', [
             'formModelPublish' => $formModelPublish,
@@ -143,8 +153,7 @@ class MeetingQuestionController extends Controller
             $service = Yii::$app->getModule('meetings')->get('publishMeetingQuestionService');
             $service->run($formModel);
 
-            // redirect
-
+            return $this->redirect(['meeting-question/view', 'id' => $formModel->question_id]);
         }
     }
 

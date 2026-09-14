@@ -11,4 +11,8 @@ class DepartmentsQuestions extends ActiveRecord
     {
         return 'departments_questions';
     }
+
+    public function getDepartment(){
+        $this->hasOne(Departments::class, ['id' => 'departments_id']);
+    }
 }
