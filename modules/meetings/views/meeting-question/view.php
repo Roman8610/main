@@ -43,7 +43,7 @@ MeetingsAsset::register($this);
                         'title' => 'Редактирование',
                     ]); ?>
                 <?php endif; ?>
-                <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, Yii::$app->user->id)): ?>
+                <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($question->id, Yii::$app->user->id)): ?>
                     <?= Html::beginForm(['meeting-question/delete'], 'post', ['style' => 'display: inline'])
                         . Html::hiddenInput('question_id', $question->id)
                         . Html::submitButton('Удалить', [
