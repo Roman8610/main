@@ -7,6 +7,7 @@
 use app\modules\meetings\assets\MeetingsAsset;
 use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\widgets\CommentsWidget;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 $this->title = 'Просмотр вопроса';
@@ -61,6 +62,17 @@ MeetingsAsset::register($this);
                 <td><?= $question->created_by ?></td>
             </tr>
             <tr>
+                <td>Адресаты</td>
+                <td>
+                    <?php
+                    $recipients = ArrayHelper::getColumn($question->recipients, 'subsidiary.name');
+                    echo $recipients
+                        ? implode('<br>', $recipients)
+                        : '—';
+                    ?>
+                </td>
+            </tr>
+            <tr>
                 <td>Название постановочного вопроса</td>
                 <td><?= $question->name ?></td>
             </tr>
@@ -96,13 +108,28 @@ MeetingsAsset::register($this);
                 <td>Последнее изменение выполнил</td>
                 <td><?= $question->updated_by ?></td>
             </tr>
+            <tr>
+                <td>Отделы</td>
+                <td>
+                    <?php
+                    $departments = ArrayHelper::getColumn($question->departments, 'department.name');
+                    echo $departments
+                        ? implode('<br>', $departments)
+                        : '—';
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td>Направления</td>
+                <td><?= $question->directions ?></td>
+            </tr>
         </table>
     </div>
-    <?php if($question->status == MeetingQuestion::STATUS_REJECTED):?>
-    <div class="alert alert-danger" role="alert">
-        <?=$question->comment_moderator?>
-    </div>
-    <?php endif?>
+    <?php if ($question->status == MeetingQuestion::STATUS_REJECTED): ?>
+        <div class="alert alert-danger" role="alert">
+            <?= $question->comment_moderator ?>
+        </div>
+    <?php endif ?>
     <?= CommentsWidget::widget([
         'question_id' => $question->id,
     ]) ?>
