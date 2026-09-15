@@ -25,6 +25,51 @@ class MeetingQuestionAccessService
     }
 
     /**
+     * Проверяет может ли пользователь создать ответ(комментарий) к вопросу
+     * @param int $questionId
+     * @param int $userId
+     * @return bool
+     */
+    public function canCreateCommentToQuestion(int $questionId, int $userId): bool
+    {
+        return true;
+    }
+
+    /**
+     * Проверяет может ли пользователь создать ответ(комментарий) к комментарию
+     * @param int $commentId
+     * @param int $userId
+     * @return bool
+     */
+    public function canCreateCommentToComment(int $commentId, int $userId): bool
+    {
+        return true;
+    }
+
+    /**
+     * Проверяет может ли пользователь редактировать комментарий
+     * @param int $commentId
+     * @param int $userId
+     * @return bool
+     */
+    public function canUpdateComment(int $commentId, int $userId): bool
+    {
+        return true;
+    }
+
+    /**
+     * Проверяет может ли пользователь удалять комментарий
+     * @param int $commentId
+     * @param int $userId
+     * @return bool
+     */
+    public function canDeleteComment(int $commentId, int $userId): bool
+    {
+        return true;
+    }
+
+
+    /**
      * Проверяет может ли пользователь отправить вопрос на модерацию
      */
     public function canSubmitForModeration(int $questionId, int $userId): bool

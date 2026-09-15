@@ -14,7 +14,7 @@ class CommentForm extends Model
     public function rules()
     {
         return [
-            [['question_id'], 'required'],
+            [['question_id', 'text'], 'required'],
             ['question_id', 'integer'],
             ['text', 'string'],
         ];
