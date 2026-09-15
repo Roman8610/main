@@ -4,6 +4,7 @@
  * @var app\modules\meetings\forms\PublishedMeetingQuestionModerationForm $formModelPublish
  * @var app\modules\meetings\forms\RejectMeetingQuestionModerationForm $formModelReject
  * @var app\modules\meetings\models\MeetingQuestion $question
+ * @var array $departments
  */
 
 use app\modules\meetings\assets\MeetingsAsset;
@@ -74,13 +75,7 @@ MeetingsAsset::register($this);
                     <div class="row">
                         <div class="col-md-6 department-input">
                             <?= $form->field($formModelPublish, 'departments')->widget(Select2::class, [
-                                'data' => [
-                                    1 => 'Отдел 1',
-                                    2 => 'Отдел 2',
-                                    3 => 'Отдел 3',
-                                    4 => 'Отдел 4',
-                                    5 => 'Отдел 5',
-                                ],
+                                'data' => $departments,
                                 'options' => [
                                     'placeholder' => 'Выберите адресатов...',
                                     'multiple' => true, // Включаем множественный выбор

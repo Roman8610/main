@@ -2,11 +2,13 @@
 
 namespace app\modules\meetings\controllers;
 
+use app\modules\meetings\forms\DeleteMeetingQuestionForm;
 use app\modules\meetings\forms\MeetingQuestionForm;
 use app\modules\meetings\forms\OffPublishedMeetingQuestionForm;
 use app\modules\meetings\forms\PublishedMeetingQuestionModerationForm;
 use app\modules\meetings\forms\RejectMeetingQuestionModerationForm;
 use app\modules\meetings\models\CommentQuestions;
+use app\modules\meetings\models\Departments;
 use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\models\Subsidiary;
 use Yii;
@@ -109,9 +111,7 @@ class MeetingQuestionController extends Controller
      */
     public function actionModeration(int $id)
     {
-        $question = $this->findModel($id);
         $userId = Yii::$app->user->id;
-
         if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($id, $userId)) {
             throw new ForbiddenHttpException('Доступ запрещен');
         }
@@ -128,11 +128,12 @@ class MeetingQuestionController extends Controller
 
         $formModelReject->setAttributes($question->attributes);
 
-
+        $departments = Departments::find()->select(['name'])->indexBy('id')->column();
         return $this->render('moderation', [
             'formModelPublish' => $formModelPublish,
             'formModelReject' => $formModelReject,
             'question' => $question,
+            'departments' => $departments,
         ]);
     }
 
@@ -186,23 +187,14 @@ class MeetingQuestionController extends Controller
 
         if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
             $userId = Yii::$app->user->id;
-            // проверить доступ
             if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($formModel->question_id, $userId)) {
                 throw new ForbiddenHttpException('Доступ запрещен');
             }
-            // вызвать сервис публикации
-            $service = Yii::$app->getModule('meetings')->get('rejectMeetingQuestionService');
-            $service->run($formModel);
+            Yii::$app->getModule('meetings')->get('rejectMeetingQuestionService')->run($formModel);
+            Yii::$app->session->setFlash('success', 'Постановочный вопрос отклонен');
 
             return $this->redirect(['meeting-question/view', 'id' => $formModel->question_id]);
         }
-
-
-        // проверить доступ
-        // загрузить RejectMeetingQuestionModerationForm
-        // провалидировать
-        // вызвать сервис отклонения
-        // redirect
     }
 
     /**
@@ -226,32 +218,24 @@ class MeetingQuestionController extends Controller
      */
     public function actionDelete()
     {
-        $id = Yii::$app->request->post('id');
-        if ($id === null || filter_var($id, FILTER_VALIDATE_INT) === false || (int) $id < 1) {
-            throw new BadRequestHttpException('Некорректный идентификатор вопроса');
-        }
+        $formModel = new DeleteMeetingQuestionForm();
 
-        $userId = Yii::$app->user->id;
-        if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($id, $userId)) {
-            throw new ForbiddenHttpException('Доступ запрещен');
-        }
+        if ($formModel->load(Yii::$app->request->post(), '') && $formModel->validate()) {
+            $userId = Yii::$app->user->id;
+            if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($formModel->question_id, $userId)) {
+                throw new ForbiddenHttpException('Доступ запрещен');
+            }
 
-        if (CommentQuestions::find()->where(['question_id' => $id])->count() != 0) {
-            Yii::$app->session->setFlash('error', 'Перед удалением постановочного вопроса необходимо удалить все ответы');
-            return $this->redirect(Yii::$app->request->referrer ?: ['meeting-question/view', 'id' => $id]);
-        }
+            if (CommentQuestions::find()->where(['question_id' => $formModel->question_id])->count() != 0) {
+                Yii::$app->session->setFlash('error', 'Перед удалением постановочного вопроса необходимо удалить все ответы');
+                return $this->redirect(Yii::$app->request->referrer ?: ['meeting-question/view', 'id' => $formModel->question_id]);
+            }
 
-        if (Yii::$app->getModule('meetings')->get('deleteQuestionService')->run($id)) {
+            Yii::$app->getModule('meetings')->get('deleteQuestionService')->run($formModel->question_id);
             Yii::$app->session->setFlash('success', 'Постановочный вопрос удален');
             return $this->redirect(['/meetings/meetings']);
         }
-
-        return $this->redirect(Yii::$app->request->referrer ?: ['meeting-question/view', 'id' => $id]);
     }
-    /**
-     * Возвращает вопрос на доработку
-     */
-    public function actionRework(int $id) {}
 
     private function findModel(int $id): MeetingQuestion
     {

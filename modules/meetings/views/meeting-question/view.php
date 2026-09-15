@@ -5,7 +5,9 @@
  */
 
 use app\modules\meetings\assets\MeetingsAsset;
+use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\widgets\CommentsWidget;
+use yii\helpers\Html;
 
 $this->title = 'Просмотр вопроса';
 $this->params['breadcrumbs'][] = ['label' => 'Вопросы', 'url' => ['index']];
@@ -26,9 +28,22 @@ MeetingsAsset::register($this);
 
 <!-- Контент вопроса -->
 <div class="question-content">
+    <?php
+    $labels = MeetingQuestion::getStatusLabels();
+    $classMap = [
+        MeetingQuestion::STATUS_DRAFT    => 'text-secondary',
+        MeetingQuestion::STATUS_PENDING  => 'text-warning',
+        MeetingQuestion::STATUS_PUBLISHED => 'text-success',
+        MeetingQuestion::STATUS_REJECTED  => 'badge text-bg-danger',
+        MeetingQuestion::STATUS_REMOVED   => 'text-muted',
+    ];
+    $label = isset($labels[$question->status]) && isset($classMap[$question->status]) ? $labels[$question->status] : 'Ошибка статуса!!!';
+    $css = isset($labels[$question->status]) && isset($classMap[$question->status])  ? $classMap[$question->status] : 'badge bg-danger';
+    //  echo Html::tag('span', $label, ['class' => $css]);
+    ?>
     <div class="question-meta-panel">
         <div class="panel-header">
-            <h1><?= $question->question_text ?></h1>
+            <h1><?= $question->name ?></h1>
             <div>
                 <a href="<?= \yii\helpers\Url::to(['update', 'id' => $question->id]) ?>" class="btn btn-edit">Редактировать</a>
                 <a href="<?= \yii\helpers\Url::to(['delete', 'id' => $question->id]) ?>"
@@ -52,6 +67,10 @@ MeetingsAsset::register($this);
             <tr>
                 <td>Текст постановочного вопроса</td>
                 <td><?= $question->question_text ?></td>
+            </tr>
+            <tr>
+                <td>Статус</td>
+                <td><?= Html::tag('span', $label, ['class' => $css]) ?></td>
             </tr>
             <tr>
                 <td>Предлагаемое решение</td>
@@ -79,7 +98,11 @@ MeetingsAsset::register($this);
             </tr>
         </table>
     </div>
-
+    <?php if($question->status == MeetingQuestion::STATUS_REJECTED):?>
+    <div class="alert alert-danger" role="alert">
+        <?=$question->comment_moderator?>
+    </div>
+    <?php endif?>
     <?= CommentsWidget::widget([
         'question_id' => $question->id,
     ]) ?>

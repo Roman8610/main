@@ -95,7 +95,7 @@ use yii\helpers\Html;
                 'delete' =>  function ($url, $model, $key) use ($userId) {
                     if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDelete($model->id, $userId)) {
                         return Html::beginForm(['meeting-question/delete'], 'post', ['style' => 'display: inline'])
-                            . Html::hiddenInput('id', $model->id)
+                            . Html::hiddenInput('question_id', $model->id)
                             . Html::submitButton(Icon::show('trash'), [
                                 'class' => 'btn btn-link p-0 border-0 text-primary',
                                 'title' => 'Удаление',

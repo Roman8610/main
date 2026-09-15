@@ -17,7 +17,7 @@ class RejectMeetingQuestionService
             throw new ForbiddenHttpException('Доступ запрещен');
         }
         $question = $this->findModel($formModel->question_id);
-        $question->directions = $formModel->comment_moderator;
+        $question->comment_moderator = $formModel->comment_moderator;
         $question->status = MeetingQuestion::STATUS_REJECTED;
         if (!$question->save(false)) {
             throw new \Exception('Не удалось сохранить вопрос: ' . json_encode($question->getErrors()));
