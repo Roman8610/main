@@ -14,16 +14,6 @@ $this->title = 'Просмотр вопроса';
 $this->params['breadcrumbs'][] = ['label' => 'Вопросы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-/**
- * Пример данных — замените на реальные из модели
- */
-$metaData = [
-    'created_at'  => '25.07.2025, 14:30',
-    'department'  => 'Отдел разработки',
-    'author'      => 'Иванов И.И.',
-    'manager'     => 'Петров П.П.',
-];
-
 MeetingsAsset::register($this);
 ?>
 
@@ -40,7 +30,6 @@ MeetingsAsset::register($this);
     ];
     $label = isset($labels[$question->status]) && isset($classMap[$question->status]) ? $labels[$question->status] : 'Ошибка статуса!!!';
     $css = isset($labels[$question->status]) && isset($classMap[$question->status])  ? $classMap[$question->status] : 'badge bg-danger';
-    //  echo Html::tag('span', $label, ['class' => $css]);
     ?>
     <div class="question-meta-panel">
         <div class="panel-header">

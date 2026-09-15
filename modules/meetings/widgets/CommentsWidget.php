@@ -12,9 +12,7 @@ class CommentsWidget extends \yii\base\Widget
     #[Override]
     public function run()
     {
-
         $tree = $this->getTree();
-
         return $this->render('comments', [
             'tree' => $tree,
         ]);
@@ -22,7 +20,6 @@ class CommentsWidget extends \yii\base\Widget
 
     private function getTree(): array
     {
-
         $comments = CommentQuestions::find()
             ->where(['question_id' => $this->question_id])
             ->orderBy(['created_at' => SORT_ASC])
@@ -34,7 +31,7 @@ class CommentsWidget extends \yii\base\Widget
         foreach ($comments as $comment) {
             $flat[$comment['id']] = $comment;
             $flat[$comment['id']]['children'] = [];
-            // TODO: убрать после подключения связи с файлами
+            // убрать после подключения связи с файлами
             $flat[$comment['id']]['files'] = [
                 [
                     'name' => 'document.pdf',

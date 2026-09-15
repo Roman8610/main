@@ -8,7 +8,7 @@ use kartik\icons\Icon;
 ?>
 
 <?php
-// TODO: Заменить на реальную связь с файлами
+// Заменить на реальную связь с файлами
 // $files = $comment['model']->files;
 $files = $comment['files'] ?? [];
 ?>
