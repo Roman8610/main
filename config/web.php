@@ -1,6 +1,7 @@
 <?php
 
 use app\modules\meetings\services\CreateAndSubmitForModerationService;
+use app\modules\meetings\services\CreateCommentService;
 use app\modules\meetings\services\CreateDraftMeetingQuestionService;
 use app\modules\meetings\services\DeleteQuestionService;
 use app\modules\meetings\services\MeetingQuestionAccessService;
@@ -47,14 +48,17 @@ $config = [
                 'deleteQuestionService' => [
                     'class' => DeleteQuestionService::class,
                 ],
-                'publishMeetingQuestionService' =>[
-                   'class' => PublishMeetingQuestionService::class,
+                'publishMeetingQuestionService' => [
+                    'class' => PublishMeetingQuestionService::class,
                 ],
-                'offPublishMeetingQuestionService' =>[
+                'offPublishMeetingQuestionService' => [
                     'class' => OffPublishMeetingQuestionService::class,
                 ],
                 'rejectMeetingQuestionService' => [
                     'class' => RejectMeetingQuestionService::class,
+                ],
+                'createCommentService' => [
+                    'class' => CreateCommentService::class,
                 ],
             ]
         ],

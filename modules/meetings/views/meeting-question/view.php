@@ -157,7 +157,7 @@ MeetingsAsset::register($this);
         'question_id' => $question->id,
     ]) ?>
     <?php $form = ActiveForm::begin([
-        'action' => ['reject', 'id' => $question->id],
+        'action' => ['/meetings/question-comments/create', 'id' => $question->id],
     ]); ?>
     <?= $form->field($formModel, 'text')->textarea(['rows' => 6]); ?>
     <?= Html::submitButton('Ответить', [

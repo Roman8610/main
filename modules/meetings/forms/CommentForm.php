@@ -8,6 +8,7 @@ use yii\base\Model;
 class CommentForm extends Model
 {
     public $question_id;
+    public $user_id;
     public $text;
 
     #[Override]
