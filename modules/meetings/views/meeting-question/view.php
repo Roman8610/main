@@ -2,11 +2,13 @@
 
 /**
  * @var app\modules\meetings\models\MeetingQuestion $question
+ * @var  app\modules\meetings\forms\CommentForm $formModel
  */
 
 use app\modules\meetings\assets\MeetingsAsset;
 use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\widgets\CommentsWidget;
+use kartik\form\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
@@ -36,23 +38,23 @@ MeetingsAsset::register($this);
             <h1><?= $question->name ?></h1>
             <div>
                 <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, Yii::$app->user->id)): ?>
-                <?= Html::a('Редактирование', ['meeting-question/update', 'id' => $question->id], [
-                    'class' => 'btn btn-primary btn-sm',
-                    'title' => 'Редактирование',
-                ]); ?>
-                <?php endif;?>
-                <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, Yii::$app->user->id)): ?>
-                <?= Html::beginForm(['meeting-question/delete'], 'post', ['style' => 'display: inline'])
-                    . Html::hiddenInput('question_id', $question->id)
-                    . Html::submitButton('Удалить', [
+                    <?= Html::a('Редактирование', ['meeting-question/update', 'id' => $question->id], [
                         'class' => 'btn btn-primary btn-sm',
-                        'title' => 'Удаление',
-                        'encode' => false,
-                        'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
-                    ])
-                    . Html::endForm();
-                ?>
-                <?php endif;?>
+                        'title' => 'Редактирование',
+                    ]); ?>
+                <?php endif; ?>
+                <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, Yii::$app->user->id)): ?>
+                    <?= Html::beginForm(['meeting-question/delete'], 'post', ['style' => 'display: inline'])
+                        . Html::hiddenInput('question_id', $question->id)
+                        . Html::submitButton('Удалить', [
+                            'class' => 'btn btn-primary btn-sm',
+                            'title' => 'Удаление',
+                            'encode' => false,
+                            'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
+                        ])
+                        . Html::endForm();
+                    ?>
+                <?php endif; ?>
                 <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($question->id, Yii::$app->user->id)): ?>
                     <?= Html::a('Модерация', ['meeting-question/moderation', 'id' => $question->id], [
                         'class' => 'btn btn-danger btn-sm',
@@ -61,16 +63,16 @@ MeetingsAsset::register($this);
                     ?>
                 <?php endif ?>
                 <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeOff($question->id, Yii::$app->user->id)): ?>
-                    <?=Html::beginForm(['meeting-question/off'], 'post', ['style' => 'display: inline'])
-                            . Html::hiddenInput('question_id', $question->id)
-                            . Html::submitButton('Снять с публикации', [
-                                'class' => 'btn btn-primary btn-sm',
-                                'title' => 'Снять с публикации',
-                                'onclick' => "return confirm('Вы уверены, что хотите снять с публикации эту запись?')",
-                            ])
-                            . Html::endForm();
-                            ?>
-                <?php endif;?>    
+                    <?= Html::beginForm(['meeting-question/off'], 'post', ['style' => 'display: inline'])
+                        . Html::hiddenInput('question_id', $question->id)
+                        . Html::submitButton('Снять с публикации', [
+                            'class' => 'btn btn-primary btn-sm',
+                            'title' => 'Снять с публикации',
+                            'onclick' => "return confirm('Вы уверены, что хотите снять с публикации эту запись?')",
+                        ])
+                        . Html::endForm();
+                    ?>
+                <?php endif; ?>
             </div>
         </div>
         <table class="meta-table">
@@ -154,3 +156,11 @@ MeetingsAsset::register($this);
     <?= CommentsWidget::widget([
         'question_id' => $question->id,
     ]) ?>
+    <?php $form = ActiveForm::begin([
+        'action' => ['reject', 'id' => $question->id],
+    ]); ?>
+    <?= $form->field($formModel, 'text')->textarea(['rows' => 6]); ?>
+    <?= Html::submitButton('Ответить', [
+        'class' => 'btn btn-primary',
+    ]); ?>
+    <?php ActiveForm::end(); ?>

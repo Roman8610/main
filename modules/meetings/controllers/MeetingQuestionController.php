@@ -2,6 +2,7 @@
 
 namespace app\modules\meetings\controllers;
 
+use app\modules\meetings\forms\CommentForm;
 use app\modules\meetings\forms\DeleteMeetingQuestionForm;
 use app\modules\meetings\forms\MeetingQuestionForm;
 use app\modules\meetings\forms\OffPublishedMeetingQuestionForm;
@@ -13,7 +14,6 @@ use app\modules\meetings\models\MeetingQuestion;
 use app\modules\meetings\models\Subsidiary;
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 
@@ -207,10 +207,13 @@ class MeetingQuestionController extends Controller
             throw new ForbiddenHttpException('Доступ запрещен');
         }
 
+        $formModel = new CommentForm();
+
         $question = $this->findModel($id);
 
         return $this->render('view', [
             'question' => $question,
+            'formModel' => $formModel,
         ]);
     }
     /**
