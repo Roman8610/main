@@ -46,10 +46,42 @@ MeetingsAsset::register($this);
         <div class="panel-header">
             <h1><?= $question->name ?></h1>
             <div>
-                <a href="<?= \yii\helpers\Url::to(['update', 'id' => $question->id]) ?>" class="btn btn-edit">Редактировать</a>
-                <a href="<?= \yii\helpers\Url::to(['delete', 'id' => $question->id]) ?>"
-                    class="btn btn-delete"
-                    onclick="return confirm('Вы уверены, что хотите удалить этот вопрос?')">Удалить</a>
+                <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, Yii::$app->user->id)): ?>
+                <?= Html::a('Редактирование', ['meeting-question/update', 'id' => $question->id], [
+                    'class' => 'btn btn-primary btn-sm',
+                    'title' => 'Редактирование',
+                ]); ?>
+                <?php endif;?>
+                <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdate($question->id, Yii::$app->user->id)): ?>
+                <?= Html::beginForm(['meeting-question/delete'], 'post', ['style' => 'display: inline'])
+                    . Html::hiddenInput('question_id', $question->id)
+                    . Html::submitButton('Удалить', [
+                        'class' => 'btn btn-primary btn-sm',
+                        'title' => 'Удаление',
+                        'encode' => false,
+                        'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
+                    ])
+                    . Html::endForm();
+                ?>
+                <?php endif;?>
+                <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeModeration($question->id, Yii::$app->user->id)): ?>
+                    <?= Html::a('Модерация', ['meeting-question/moderation', 'id' => $question->id], [
+                        'class' => 'btn btn-danger btn-sm',
+                        'title' => 'Вопрос ожидает Вашей модерации',
+                    ]);
+                    ?>
+                <?php endif ?>
+                <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canMakeOff($question->id, Yii::$app->user->id)): ?>
+                    <?=Html::beginForm(['meeting-question/off'], 'post', ['style' => 'display: inline'])
+                            . Html::hiddenInput('question_id', $question->id)
+                            . Html::submitButton('Снять с публикации', [
+                                'class' => 'btn btn-primary btn-sm',
+                                'title' => 'Снять с публикации',
+                                'onclick' => "return confirm('Вы уверены, что хотите снять с публикации эту запись?')",
+                            ])
+                            . Html::endForm();
+                            ?>
+                <?php endif;?>    
             </div>
         </div>
         <table class="meta-table">
