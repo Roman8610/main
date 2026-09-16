@@ -9,12 +9,6 @@ use yii\helpers\Html;
 use kartik\icons\Icon;
 ?>
 
-<?php
-// Заменить на реальную связь с файлами
-// $files = $comment['model']->files;
-$files = $comment['files'] ?? [];
-?>
-
 <div class="comment mb-3 <?= $depth > 0 ? 'ms-3' : '' ?>" data-id="<?= $comment['id'] ?>">
     <div class="card">
         <div class="card-body p-3">
@@ -29,13 +23,31 @@ $files = $comment['files'] ?? [];
                     <?php endif; ?>
                 </small>
                 <div class="d-flex gap-2">
-                    <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('pencil') ?></a>
-                    <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('reply') ?></a>
+                    <a href="#"
+                       class="text-muted opacity-50"
+                       style="font-size: 0.8rem"
+                       data-bs-toggle="modal"
+                       data-bs-target="#editCommentModal"
+                       data-comment-id="<?= (int)$comment['id'] ?>"
+                       data-comment-text="<?= Html::encode($comment['text']) ?>"
+                       title="Редактировать">
+                        <?= Icon::show('pencil') ?>
+                    </a>
+                    <a href="#"
+                       class="text-muted opacity-50"
+                       style="font-size: 0.8rem"
+                       data-bs-toggle="modal"
+                       data-bs-target="#replyCommentModal"
+                       data-parent-comment-id="<?= (int)$comment['id'] ?>"
+                       title="Ответить">
+                        <?= Icon::show('reply') ?>
+                    </a>
                     <!-- <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('trash') ?></a> -->
                     <?= Html::beginForm(['/meetings/question-comments/delete'], 'post', ['style' => 'display: inline'])
                         . Html::hiddenInput('comment_id', $comment['id'])
                         . Html::submitButton(Icon::show('trash') , [
-                            'class' => 'btn btn-primary',
+                            'class' => 'btn p-0 border-0 bg-transparent text-muted opacity-50',
+                            'style' => 'font-size: 0.8rem',
                             'title' => 'Удаление',
                             'encode' => false,
                             'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
@@ -47,21 +59,6 @@ $files = $comment['files'] ?? [];
             <div class="comment-text text-secondary">
                 <?= nl2br(Html::encode($comment['text'])) ?>
             </div>
-
-            <?php if (!empty($files)): ?>
-                <div class="border-top pt-2 mt-2">
-                    <div class="attachments d-flex align-items-center gap-3">
-                        <?php foreach ($files as $file): ?>
-                            <div class="d-flex align-items-center gap-2">
-                                <?= Icon::show('file', ['class' => 'text-muted opacity-50']) ?>
-                                <span class="text-muted opacity-50" style="font-size: 0.75rem"><?= Html::encode($file['name']) ?></span>
-                                <span class="text-muted opacity-50" style="font-size: 0.75rem">(<?= $file['size'] ?>)</span>
-                                <a href="<?= $file['url'] ?>" class="text-muted opacity-50" style="font-size: 0.75rem">скачать</a>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            <?php endif; ?>
         </div>
     </div>
 

@@ -31,24 +31,6 @@ class CommentsWidget extends \yii\base\Widget
         foreach ($comments as $comment) {
             $flat[$comment['id']] = $comment;
             $flat[$comment['id']]['children'] = [];
-            // убрать после подключения связи с файлами
-            $flat[$comment['id']]['files'] = [
-                [
-                    'name' => 'document.pdf',
-                    'size' => '245 KB',
-                    'url'  => '/uploads/document.pdf',
-                ],
-                                [
-                    'name' => 'document.pdf',
-                    'size' => '245 KB',
-                    'url'  => '/uploads/document.pdf',
-                ],
-                                [
-                    'name' => 'document.pdf',
-                    'size' => '245 KB',
-                    'url'  => '/uploads/document.pdf',
-                ],
-            ];
         }
 
         $tree = [];
