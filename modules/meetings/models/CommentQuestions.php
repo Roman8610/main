@@ -20,4 +20,8 @@ class CommentQuestions extends \yii\db\ActiveRecord
             'text' => 'Комментарий',
         ];
     }
+
+    public function getQuestion(){
+        return $this->hasOne(MeetingQuestion::class, ['id' => 'question_id']);
+    }
 }

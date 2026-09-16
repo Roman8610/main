@@ -3,6 +3,7 @@
 use app\modules\meetings\services\CreateAndSubmitForModerationService;
 use app\modules\meetings\services\CreateCommentService;
 use app\modules\meetings\services\CreateDraftMeetingQuestionService;
+use app\modules\meetings\services\DeleteCommentService;
 use app\modules\meetings\services\DeleteQuestionService;
 use app\modules\meetings\services\MeetingQuestionAccessService;
 use app\modules\meetings\services\MeetingQuestionVisibilityFilterService;
@@ -59,6 +60,9 @@ $config = [
                 ],
                 'createCommentService' => [
                     'class' => CreateCommentService::class,
+                ],
+                'deleteCommentService' => [
+                    'class' => DeleteCommentService::class,
                 ],
             ]
         ],

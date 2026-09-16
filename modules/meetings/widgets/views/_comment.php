@@ -1,8 +1,10 @@
 <?php
+
 /**
  * @var array $comment
  * @var int $depth
  */
+
 use yii\helpers\Html;
 use kartik\icons\Icon;
 ?>
@@ -29,7 +31,17 @@ $files = $comment['files'] ?? [];
                 <div class="d-flex gap-2">
                     <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('pencil') ?></a>
                     <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('reply') ?></a>
-                    <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('trash') ?></a>
+                    <!-- <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('trash') ?></a> -->
+                    <?= Html::beginForm(['/meetings/question-comments/delete'], 'post', ['style' => 'display: inline'])
+                        . Html::hiddenInput('comment_id', $comment['id'])
+                        . Html::submitButton(Icon::show('trash') , [
+                            'class' => 'btn btn-primary',
+                            'title' => 'Удаление',
+                            'encode' => false,
+                            'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
+                        ])
+                        . Html::endForm();
+                    ?>
                 </div>
             </div>
             <div class="comment-text text-secondary">
