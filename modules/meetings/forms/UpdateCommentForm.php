@@ -6,17 +6,16 @@ use Override;
 use yii\base\Model;
 
 class UpdateCommentForm extends Model {
+    public $comment_id;
     public $question_id;
-    public $parent_id;
-    public $user_id;
     public $text;
 
     #[Override]
     public function rules()
     {
         return [
-            [['question_id', 'text'], 'required'],
-            ['question_id', 'integer'],
+            [['comment_id', 'text', 'question_id'], 'required'],
+            [['comment_id', 'question_id'], 'integer'],
             ['text', 'string'],
         ];
     }

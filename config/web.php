@@ -13,6 +13,7 @@ use app\modules\meetings\services\UpdateAndSubmitForModerationService;
 use app\modules\meetings\services\UpdateDraftMeetingQuestionService;
 use app\modules\meetings\services\PublishMeetingQuestionService;
 use app\modules\meetings\services\RejectMeetingQuestionService;
+use app\modules\meetings\services\UpdateCommentService;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -63,6 +64,9 @@ $config = [
                 ],
                 'deleteCommentService' => [
                     'class' => DeleteCommentService::class,
+                ],
+                'updateCommentService' =>[
+                    'class' => UpdateCommentService::class,
                 ],
             ]
         ],

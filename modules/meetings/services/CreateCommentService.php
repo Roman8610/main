@@ -19,6 +19,7 @@ class CreateCommentService
         $comment->question_id = $formModel->question_id;
         $comment->created_at = date('Y-m-d H:i:s');
         $comment->text = $formModel->text;
+        $comment->parent_id = $formModel->parent_id;
 
         if (!$comment->save()) {
             throw new \Exception('Не удалось сохранить вопрос: ' . json_encode($comment->getErrors()));

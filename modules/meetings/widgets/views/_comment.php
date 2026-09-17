@@ -44,7 +44,6 @@ use kartik\icons\Icon;
                        title="Ответить">
                         <?= Icon::show('reply') ?>
                     </a>
-                    <!-- <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('trash') ?></a> -->
                     <?php $form = ActiveForm::begin([
                         'action' => ['/meetings/question-comments/delete'],
                         'options' => ['style' => 'display: inline'],
@@ -58,7 +57,7 @@ use kartik\icons\Icon;
                             'style' => 'font-size: 0.8rem',
                             'title' => 'Удаление',
                             'encode' => false,
-                            'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
+                            'onclick' => "return confirm('ВАЖНО!!! Вложенные элементы также будут удалены. Вы уверены, что хотите удалить эту запись?')",
                     ]) ?>
                     <?php ActiveForm::end(); ?>
                 </div>

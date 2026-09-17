@@ -70,7 +70,7 @@ use yii\helpers\Url;
                 <div class="mt-3 text-end">
                     <?= Html::submitButton('Сохранить', [
                         'class' => 'btn btn-primary',
-                        'disabled' => true,
+                       // 'disabled' => true,
                     ]) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
@@ -106,17 +106,13 @@ use yii\helpers\Url;
                     'placeholder' => 'Введите ответ',
                     'id' => 'replyCommentText',
                 ]) ?>
-                <?= $form->field($formModelCommentCreate, 'question_id')->hiddenInput([
-                    'value' => $question_id,
-                    'id' => 'replyQuestionId',
-                ])->label(false) ?>
                 <?= $form->field($formModelCommentCreate, 'parent_id')->hiddenInput([
                     'id' => 'replyParentCommentId',
                 ])->label(false) ?>
                 <div class="mt-3 text-end">
                     <?= Html::submitButton('Ответить', [
                         'class' => 'btn btn-primary',
-                        'disabled' => true,
+                      //  'disabled' => true,
                     ]) ?>
                 </div>
                 <?php ActiveForm::end(); ?>

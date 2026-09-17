@@ -17,7 +17,7 @@ class CommentForm extends Model
     {
         return [
             [['question_id', 'text'], 'required'],
-            ['question_id', 'integer'],
+            [['question_id', 'parent_id'], 'integer'],
             ['text', 'string'],
         ];
     }

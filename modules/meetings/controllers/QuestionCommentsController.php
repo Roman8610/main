@@ -4,6 +4,7 @@ namespace app\modules\meetings\controllers;
 
 use app\modules\meetings\forms\CommentForm;
 use app\modules\meetings\forms\DeleteCommentForm;
+use app\modules\meetings\forms\UpdateCommentForm;
 use app\modules\meetings\models\CommentQuestions;
 use Yii;
 use yii\filters\VerbFilter;
@@ -29,6 +30,7 @@ class QuestionCommentsController extends Controller
     {
         $formModel = new CommentForm();
         $formModel->question_id = $id;
+
         if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
             $userId = Yii::$app->user->id;
             if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreateCommentToQuestion($formModel->question_id, $userId)) {
@@ -40,7 +42,20 @@ class QuestionCommentsController extends Controller
         }
     }
 
-    public function actionUpdate(int $id) {}
+    public function actionUpdate(int $id)
+    {
+        $formModel = new UpdateCommentForm();
+        $formModel->comment_id = $id;
+        if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
+            $userId = Yii::$app->user->id;
+            if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdateComment($formModel->question_id, $userId)) {
+                throw new \yii\web\ForbiddenHttpException('Доступ запрещен');
+            }
+        }
+        Yii::$app->getModule('meetings')->get('updateCommentService')->run($formModel);
+        Yii::$app->session->setFlash('success', 'Изменения сохранены');
+        return $this->redirect(Yii::$app->request->referrer ?: ['meetings']);
+    }
 
     public function actionDelete()
     {
