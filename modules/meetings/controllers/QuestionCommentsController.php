@@ -5,7 +5,6 @@ namespace app\modules\meetings\controllers;
 use app\modules\meetings\forms\CommentForm;
 use app\modules\meetings\forms\DeleteCommentForm;
 use app\modules\meetings\forms\UpdateCommentForm;
-use app\modules\meetings\models\CommentQuestions;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
