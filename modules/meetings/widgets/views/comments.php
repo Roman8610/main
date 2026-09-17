@@ -2,9 +2,15 @@
 
 /**
  * @var array $tree
+ * @var int $question_id
+ * @var app\modules\meetings\forms\CommentForm $formModelCommentCreate
+ * @var app\modules\meetings\forms\UpdateCommentForm $formModelCommentUpdate
+ * @var app\modules\meetings\forms\DeleteCommentForm $formModelCommentDelete
  */
 
+use kartik\form\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
 
 <div class="comments-section">
@@ -16,6 +22,7 @@ use yii\helpers\Html;
                 <?= $this->render('_comment', [
                     'comment' => $comment,
                     'depth'   => 0,
+                    'formModelCommentDelete' => $formModelCommentDelete,
                 ]) ?>
             <?php endforeach; ?>
         </div>
@@ -42,20 +49,31 @@ use yii\helpers\Html;
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
             <div class="modal-body">
-                <?= Html::beginForm('', 'post', ['id' => 'editCommentForm']) ?>
-                <?= Html::textarea('text', '', [
-                    'class' => 'form-control',
+                <?php $form = ActiveForm::begin([
+                    'action' => Url::to(['/meetings/question-comments/update', 'id' => 0]),
+                    'id' => 'editCommentForm',
+                    'options' => [
+                        'data-action-template' => Url::to([
+                            '/meetings/question-comments/update',
+                            'id' => '__COMMENT_ID__',
+                        ]),
+                    ],
+                ]); ?>
+                <?= $form->field($formModelCommentUpdate, 'text')->textarea([
                     'rows' => 6,
                     'id' => 'editCommentText',
                 ]) ?>
-                <?= Html::hiddenInput('comment_id', '', ['id' => 'editCommentId']) ?>
+                <?= $form->field($formModelCommentUpdate, 'question_id')->hiddenInput([
+                    'value' => $question_id,
+                    'id' => 'editCommentQuestionId',
+                ])->label(false) ?>
                 <div class="mt-3 text-end">
                     <?= Html::submitButton('Сохранить', [
                         'class' => 'btn btn-primary',
                         'disabled' => true,
                     ]) ?>
                 </div>
-                <?= Html::endForm() ?>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
     </div>
@@ -79,21 +97,29 @@ use yii\helpers\Html;
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
             <div class="modal-body">
-                <?= Html::beginForm('', 'post', ['id' => 'replyCommentForm']) ?>
-                <?= Html::textarea('text', '', [
-                    'class' => 'form-control',
+                <?php $form = ActiveForm::begin([
+                    'action' => ['/meetings/question-comments/create', 'id' => $question_id],
+                    'id' => 'replyCommentForm',
+                ]); ?>
+                <?= $form->field($formModelCommentCreate, 'text')->textarea([
                     'rows' => 6,
                     'placeholder' => 'Введите ответ',
                     'id' => 'replyCommentText',
                 ]) ?>
-                <?= Html::hiddenInput('parent_comment_id', '', ['id' => 'replyParentCommentId']) ?>
+                <?= $form->field($formModelCommentCreate, 'question_id')->hiddenInput([
+                    'value' => $question_id,
+                    'id' => 'replyQuestionId',
+                ])->label(false) ?>
+                <?= $form->field($formModelCommentCreate, 'parent_id')->hiddenInput([
+                    'id' => 'replyParentCommentId',
+                ])->label(false) ?>
                 <div class="mt-3 text-end">
                     <?= Html::submitButton('Ответить', [
                         'class' => 'btn btn-primary',
                         'disabled' => true,
                     ]) ?>
                 </div>
-                <?= Html::endForm() ?>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
     </div>
@@ -108,7 +134,8 @@ document.addEventListener('click', function (event) {
 
     if (editLink) {
         document.getElementById('editCommentText').value = editLink.dataset.commentText;
-        document.getElementById('editCommentId').value = editLink.dataset.commentId;
+        const editForm = document.getElementById('editCommentForm');
+        editForm.action = editForm.dataset.actionTemplate.replace('__COMMENT_ID__', editLink.dataset.commentId);
     }
 
     if (replyLink) {

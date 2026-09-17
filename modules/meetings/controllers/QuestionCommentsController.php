@@ -45,7 +45,7 @@ class QuestionCommentsController extends Controller
     public function actionDelete()
     {
         $formModel = new DeleteCommentForm();
-        if ($formModel->load(Yii::$app->request->post(), '') && $formModel->validate()) {
+        if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
             $userId = Yii::$app->user->id;
             if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canDeleteComment($formModel->comment_id, $userId)) {
                 throw new \yii\web\ForbiddenHttpException('Доступ запрещен');

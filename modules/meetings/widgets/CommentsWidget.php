@@ -21,6 +21,7 @@ class CommentsWidget extends \yii\base\Widget
         $tree = $this->getTree();
         return $this->render('comments', [
             'tree' => $tree,
+            'question_id' => $this->question_id,
             'formModelCommentCreate' => $this->formModelCommentCreate,
             'formModelCommentUpdate' => $this->formModelCommentUpdate,
             'formModelCommentDelete' => $this->formModelCommentDelete,

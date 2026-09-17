@@ -3,8 +3,10 @@
 /**
  * @var array $comment
  * @var int $depth
+ * @var app\modules\meetings\forms\DeleteCommentForm $formModelCommentDelete
  */
 
+use kartik\form\ActiveForm;
 use yii\helpers\Html;
 use kartik\icons\Icon;
 ?>
@@ -43,17 +45,22 @@ use kartik\icons\Icon;
                         <?= Icon::show('reply') ?>
                     </a>
                     <!-- <a href="#" class="text-muted opacity-50" style="font-size: 0.8rem"><?= Icon::show('trash') ?></a> -->
-                    <?= Html::beginForm(['/meetings/question-comments/delete'], 'post', ['style' => 'display: inline'])
-                        . Html::hiddenInput('comment_id', $comment['id'])
-                        . Html::submitButton(Icon::show('trash') , [
+                    <?php $form = ActiveForm::begin([
+                        'action' => ['/meetings/question-comments/delete'],
+                        'options' => ['style' => 'display: inline'],
+                        'fieldConfig' => ['template' => "{input}"],
+                    ]); ?>
+                    <?= $form->field($formModelCommentDelete, 'comment_id')->hiddenInput([
+                        'value' => $comment['id'],
+                    ]) ?>
+                    <?= Html::submitButton(Icon::show('trash'), [
                             'class' => 'btn p-0 border-0 bg-transparent text-muted opacity-50',
                             'style' => 'font-size: 0.8rem',
                             'title' => 'Удаление',
                             'encode' => false,
                             'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
-                        ])
-                        . Html::endForm();
-                    ?>
+                    ]) ?>
+                    <?php ActiveForm::end(); ?>
                 </div>
             </div>
             <div class="comment-text text-secondary">
@@ -68,6 +75,7 @@ use kartik\icons\Icon;
                 <?= $this->render('_comment', [
                     'comment' => $child,
                     'depth'   => $depth + 1,
+                    'formModelCommentDelete' => $formModelCommentDelete,
                 ]) ?>
             <?php endforeach; ?>
         </div>
