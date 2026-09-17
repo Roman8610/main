@@ -1,19 +1,19 @@
 <?php
 
-use app\modules\meetings\services\CreateAndSubmitForModerationService;
-use app\modules\meetings\services\CreateCommentService;
-use app\modules\meetings\services\CreateDraftMeetingQuestionService;
-use app\modules\meetings\services\DeleteCommentService;
-use app\modules\meetings\services\DeleteQuestionService;
-use app\modules\meetings\services\MeetingQuestionAccessService;
-use app\modules\meetings\services\MeetingQuestionVisibilityFilterService;
-use app\modules\meetings\services\OffPublishMeetingQuestionService;
-use app\modules\meetings\services\SubmitForModerationService;
-use app\modules\meetings\services\UpdateAndSubmitForModerationService;
-use app\modules\meetings\services\UpdateDraftMeetingQuestionService;
-use app\modules\meetings\services\PublishMeetingQuestionService;
-use app\modules\meetings\services\RejectMeetingQuestionService;
-use app\modules\meetings\services\UpdateCommentService;
+use app\modules\Qm\services\CreateAndSubmitForModerationService;
+use app\modules\Qm\services\CreateCommentService;
+use app\modules\Qm\services\CreateDraftMeetingQuestionService;
+use app\modules\Qm\services\DeleteCommentService;
+use app\modules\Qm\services\DeleteQuestionService;
+use app\modules\Qm\services\MeetingQuestionAccessService;
+use app\modules\Qm\services\MeetingQuestionVisibilityFilterService;
+use app\modules\Qm\services\OffPublishMeetingQuestionService;
+use app\modules\Qm\services\SubmitForModerationService;
+use app\modules\Qm\services\UpdateAndSubmitForModerationService;
+use app\modules\Qm\services\UpdateDraftMeetingQuestionService;
+use app\modules\Qm\services\PublishMeetingQuestionService;
+use app\modules\Qm\services\RejectMeetingQuestionService;
+use app\modules\Qm\services\UpdateCommentService;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -23,8 +23,8 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'modules' => [
-        'meetings' => [
-            'class' => 'app\modules\meetings\Module',
+        'Qm' => [
+            'class' => 'app\modules\Qm\Module',
             'components' => [
                 'createDraftMeetingQuestionService' => [
                     'class' => CreateDraftMeetingQuestionService::class,
@@ -113,7 +113,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'meetings/meetings' => 'meetings/meetings/index',
+                'Qm/meetings' => 'Qm/meetings/index',
             ],
         ],
         /*

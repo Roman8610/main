@@ -1,0 +1,58 @@
+<?php
+
+namespace app\modules\Qm\controllers;
+
+use app\modules\Qm\models\Meeting;
+use app\modules\Qm\models\MeetingQuestion;
+use app\modules\Qm\models\MeetingSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+
+class MeetingsController extends Controller
+{
+    public function actionIndex()
+    {
+        // Временная проверка потом убрать
+        if (!Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException('Вы не авторизованы.');
+        }
+        $modelSearch = new MeetingSearch();
+        $dataProvider = $modelSearch->search();
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionView(int $id)
+    { 
+        $meeting = Meeting::findOne($id);
+        if ($meeting === null) {
+            throw new NotFoundHttpException('Совещание не найдено.');
+        }
+
+        // Временная проверка потом убрать
+        if (!Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException('Вы не авторизованы.');
+        }
+
+        $userId = Yii::$app->user->id;
+        $baseQuery = MeetingQuestion::findByQuestions($id);
+
+        $query = Yii::$app
+            ->getModule('Qm')
+            ->get('meetingQuestionVisibilityFilterService')
+            ->applyVisibilityConditions($baseQuery, $userId, $id);
+
+        $query->with(['recipients.subsidiary']);
+
+        $dataProvider = new ActiveDataProvider(['query' => $query]);
+
+        return $this->render('view', [
+            'userId' => $userId,
+            'meeting' => $meeting,
+            'dataProviderQuestion' => $dataProvider,
+        ]);
+    }
+}
