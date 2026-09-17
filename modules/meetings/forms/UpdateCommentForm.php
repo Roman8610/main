@@ -5,8 +5,7 @@ namespace app\modules\meetings\forms;
 use Override;
 use yii\base\Model;
 
-class CommentForm extends Model
-{
+class UpdateCommentForm extends Model {
     public $question_id;
     public $parent_id;
     public $user_id;

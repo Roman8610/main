@@ -2,7 +2,9 @@
 
 /**
  * @var app\modules\meetings\models\MeetingQuestion $question
- * @var  app\modules\meetings\forms\CommentForm $formModel
+ * @var  app\modules\meetings\forms\CommentForm $formModelCommentCreate
+ * @var  app\modules\meetings\forms\UpdateCommentForm $formModelCommentUpdate
+ * @var  app\modules\meetings\forms\DeleteCommentForm $formModelCommentDelete
  */
 
 use app\modules\meetings\assets\MeetingsAsset;
@@ -155,11 +157,14 @@ MeetingsAsset::register($this);
     <?php endif ?>
     <?= CommentsWidget::widget([
         'question_id' => $question->id,
+        'formModelCommentCreate' => $formModelCommentCreate,
+        'formModelCommentUpdate' => $formModelCommentUpdate,
+        'formModelCommentDelete' => $formModelCommentDelete,
     ]) ?>
     <?php $form = ActiveForm::begin([
         'action' => ['/meetings/question-comments/create', 'id' => $question->id],
     ]); ?>
-    <?= $form->field($formModel, 'text')->textarea(['rows' => 6]); ?>
+    <?= $form->field($formModelCommentCreate, 'text')->textarea(['rows' => 6]); ?>
     <?= Html::submitButton('Ответить', [
         'class' => 'btn btn-primary',
     ]); ?>

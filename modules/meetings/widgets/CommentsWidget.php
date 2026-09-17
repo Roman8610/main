@@ -2,12 +2,18 @@
 
 namespace app\modules\meetings\widgets;
 
+use app\modules\meetings\forms\CommentForm;
+use app\modules\meetings\forms\DeleteCommentForm;
+use app\modules\meetings\forms\UpdateCommentForm;
 use app\modules\meetings\models\CommentQuestions;
 use Override;
 
 class CommentsWidget extends \yii\base\Widget
 {
     public int $question_id;
+    public CommentForm $formModelCommentCreate;
+    public UpdateCommentForm $formModelCommentUpdate;
+    public DeleteCommentForm $formModelCommentDelete;
 
     #[Override]
     public function run()
@@ -15,6 +21,9 @@ class CommentsWidget extends \yii\base\Widget
         $tree = $this->getTree();
         return $this->render('comments', [
             'tree' => $tree,
+            'formModelCommentCreate' => $this->formModelCommentCreate,
+            'formModelCommentUpdate' => $this->formModelCommentUpdate,
+            'formModelCommentDelete' => $this->formModelCommentDelete,
         ]);
     }
 

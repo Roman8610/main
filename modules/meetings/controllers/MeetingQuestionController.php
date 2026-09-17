@@ -3,11 +3,13 @@
 namespace app\modules\meetings\controllers;
 
 use app\modules\meetings\forms\CommentForm;
+use app\modules\meetings\forms\DeleteCommentForm;
 use app\modules\meetings\forms\DeleteMeetingQuestionForm;
 use app\modules\meetings\forms\MeetingQuestionForm;
 use app\modules\meetings\forms\OffPublishedMeetingQuestionForm;
 use app\modules\meetings\forms\PublishedMeetingQuestionModerationForm;
 use app\modules\meetings\forms\RejectMeetingQuestionModerationForm;
+use app\modules\meetings\forms\UpdateCommentForm;
 use app\modules\meetings\models\CommentQuestions;
 use app\modules\meetings\models\Departments;
 use app\modules\meetings\models\MeetingQuestion;
@@ -207,13 +209,17 @@ class MeetingQuestionController extends Controller
             throw new ForbiddenHttpException('Доступ запрещен');
         }
 
-        $formModel = new CommentForm();
+        $formModelCommentCreate = new CommentForm();
+        $formModelCommentUpdate = new UpdateCommentForm();
+        $formModelCommentDelete = new DeleteCommentForm();
 
         $question = $this->findModel($id);
 
         return $this->render('view', [
             'question' => $question,
-            'formModel' => $formModel,
+            'formModelCommentCreate' => $formModelCommentCreate,
+            'formModelCommentUpdate' => $formModelCommentUpdate,
+            'formModelCommentDelete' => $formModelCommentDelete,
         ]);
     }
     /**
