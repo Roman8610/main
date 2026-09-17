@@ -17,6 +17,7 @@ class UpdateCommentService
         }
 
         $comment = $this->findModel($formModel->comment_id);
+        $comment->updated_at = date('Y-m-d H:i:s');
         $comment->text = $formModel->text;
 
         if (!$comment->save()) {

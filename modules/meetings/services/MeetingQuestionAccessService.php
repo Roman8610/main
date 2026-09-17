@@ -32,7 +32,11 @@ class MeetingQuestionAccessService
      */
     public function canCreateCommentToQuestion(int $questionId, int $userId): bool
     {
-        return true;
+        $question = $this->getQuestion($questionId);
+        if ($question->status == MeetingQuestion::STATUS_PUBLISHED) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -132,11 +136,11 @@ class MeetingQuestionAccessService
     /**
      * Проверяет может ли пользователь просматривать вопрос
      * Администратор может просматривать все вопросы
-     * Вопросы со статусом {@see MeetingQuestion::STATUS_DRAFT} может просматривать только собственник вопроса
-     * Вопросы со статусом {@see MeetingQuestion::STATUS_PENDING} может просматривать собственник вопроса и модератор
-     * Вопросы со статусом {@see MeetingQuestion::STATUS_PUBLISHED} может просматривать собственник вопроса, модератор, сотрудник дочернего общества, участник совещания
-     * Вопросы со статусом {@see MeetingQuestion::STATUS_REJECTED} может просматривать собственник вопроса и модератор
-     * Вопросы со статусом {@see MeetingQuestion::STATUS_REMOVED} может просматривать собственник вопроса и модератор
+     * Вопросы со статусом {@see MeetingQuestion::STATUS_DRAFT} может просматривать только автор вопроса
+     * Вопросы со статусом {@see MeetingQuestion::STATUS_PENDING} может просматривать автор вопроса и модератор
+     * Вопросы со статусом {@see MeetingQuestion::STATUS_PUBLISHED} может просматривать автор вопроса, модератор, сотрудник дочернего общества, участник совещания
+     * Вопросы со статусом {@see MeetingQuestion::STATUS_REJECTED} может просматривать автор вопроса и модератор
+     * Вопросы со статусом {@see MeetingQuestion::STATUS_REMOVED} может просматривать автор вопроса и модератор
      * @param int $questionId идентификатор вопроса
      * @param int $userId идентификатор пользователя
      * @return bool

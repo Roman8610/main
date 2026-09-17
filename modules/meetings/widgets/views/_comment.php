@@ -11,7 +11,7 @@ use yii\helpers\Html;
 use kartik\icons\Icon;
 ?>
 
-<div class="comment mb-3 <?= $depth > 0 ? 'ms-3' : '' ?>" data-id="<?= $comment['id'] ?>">
+<div class="comment mb-3 <?= $depth > 0 ? 'ms-5' : '' ?>" data-id="<?= $comment['id'] ?>">
     <div class="card">
         <div class="card-body p-3">
             <div class="d-flex justify-content-between align-items-center mb-1">
@@ -24,42 +24,51 @@ use kartik\icons\Icon;
                         &nbsp;&nbsp;|&nbsp;&nbsp;Изменен: <?= Yii::$app->formatter->asDatetime($comment['updated_at'], 'dd.MM.yyyy HH:mm') ?>
                     <?php endif; ?>
                 </small>
-                <div class="d-flex gap-2">
-                    <a href="#"
-                       class="text-muted opacity-50"
-                       style="font-size: 0.8rem"
-                       data-bs-toggle="modal"
-                       data-bs-target="#editCommentModal"
-                       data-comment-id="<?= (int)$comment['id'] ?>"
-                       data-comment-text="<?= Html::encode($comment['text']) ?>"
-                       title="Редактировать">
+                <div class="d-flex align-items-center gap-2">
+                    <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canUpdateComment($comment['id'], Yii::$app->user->id)): ?>
+                        <a href="#"
+                            class="text-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editCommentModal"
+                            data-comment-id="<?= (int)$comment['id'] ?>"
+                            data-comment-text="<?= Html::encode($comment['text']) ?>"
+                            title="Редактировать">
+                            <?= Icon::show('pencil') ?>
+                        </a>
+                    <?php else: ?>
                         <?= Icon::show('pencil') ?>
-                    </a>
-                    <a href="#"
-                       class="text-muted opacity-50"
-                       style="font-size: 0.8rem"
-                       data-bs-toggle="modal"
-                       data-bs-target="#replyCommentModal"
-                       data-parent-comment-id="<?= (int)$comment['id'] ?>"
-                       title="Ответить">
+                    <?php endif; ?>
+                    <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreateCommentToComment($comment['id'], Yii::$app->user->id)): ?>
+                        <a href="#"
+                            class="text-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#replyCommentModal"
+                            data-parent-comment-id="<?= (int)$comment['id'] ?>"
+                            title="Ответить">
+                            <?= Icon::show('reply') ?>
+                        </a>
+                    <?php else: ?>
                         <?= Icon::show('reply') ?>
-                    </a>
-                    <?php $form = ActiveForm::begin([
-                        'action' => ['/meetings/question-comments/delete'],
-                        'options' => ['style' => 'display: inline'],
-                        'fieldConfig' => ['template' => "{input}"],
-                    ]); ?>
-                    <?= $form->field($formModelCommentDelete, 'comment_id')->hiddenInput([
-                        'value' => $comment['id'],
-                    ]) ?>
-                    <?= Html::submitButton(Icon::show('trash'), [
-                            'class' => 'btn p-0 border-0 bg-transparent text-muted opacity-50',
-                            'style' => 'font-size: 0.8rem',
+                    <?php endif; ?>
+                    <?php if (Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreateCommentToComment($comment['id'], Yii::$app->user->id)): ?>
+                        <?php $form = ActiveForm::begin([
+                            'action' => ['/meetings/question-comments/delete'],
+                            'options' => ['class' => 'd-inline-flex align-items-center m-0 p-0'],
+                            'fieldConfig' => ['template' => "{input}"],
+                        ]); ?>
+                        <?= $form->field($formModelCommentDelete, 'comment_id')->hiddenInput([
+                            'value' => $comment['id'],
+                        ]) ?>
+                        <?= Html::submitButton(Icon::show('trash'), [
+                            'class' => 'border-0 bg-transparent p-0 text-primary d-flex align-items-center',
                             'title' => 'Удаление',
                             'encode' => false,
                             'onclick' => "return confirm('ВАЖНО!!! Вложенные элементы также будут удалены. Вы уверены, что хотите удалить эту запись?')",
-                    ]) ?>
-                    <?php ActiveForm::end(); ?>
+                        ]) ?>
+                        <?php ActiveForm::end(); ?>
+                    <?php else: ?>
+                        <?=Icon::show('trash')?>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="comment-text text-secondary">

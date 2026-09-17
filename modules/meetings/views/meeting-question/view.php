@@ -165,7 +165,19 @@ MeetingsAsset::register($this);
         'action' => ['/meetings/question-comments/create', 'id' => $question->id],
     ]); ?>
     <?= $form->field($formModelCommentCreate, 'text')->textarea(['rows' => 6]); ?>
-    <?= Html::submitButton('Ответить', [
-        'class' => 'btn btn-primary',
-    ]); ?>
+    <?php if (!Yii::$app->getModule('meetings')->get('meetingQuestionAccessService')->canCreateCommentToQuestion($question->id, Yii::$app->user->id)): ?>
+        <?= Html::submitButton('Ответить', [
+            'class' => 'btn btn-primary',
+            'disabled' => true,
+        ]); ?>
+        <small class="text-danger ms-2">
+            - Возможность добавления ответа к постановочному вопросу закрыта!
+        </small>
+    <?php else: ?>
+        <?= Html::submitButton('Ответить', [
+            'class' => 'btn btn-primary',
+            'disabled' => false,
+        ]); ?>
+    <?php endif; ?>
+
     <?php ActiveForm::end(); ?>
