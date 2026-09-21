@@ -8,6 +8,9 @@ use app\modules\Qm\forms\UpdateCommentForm;
 use app\modules\Qm\models\CommentQuestions;
 use Override;
 
+/**
+ * Виджет отображения дерева комментариев к постановочному вопросу.
+ */
 class CommentsWidget extends \yii\base\Widget
 {
     public int $question_id;
@@ -16,6 +19,11 @@ class CommentsWidget extends \yii\base\Widget
     public DeleteCommentForm $formModelCommentDelete;
 
     #[Override]
+    /**
+     * Строит дерево комментариев и передает его в представление виджета.
+     *
+     * @return string Сгенерированное представление виджета.
+     */
     public function run()
     {
         $tree = $this->getTree();
@@ -28,6 +36,11 @@ class CommentsWidget extends \yii\base\Widget
         ]);
     }
 
+    /**
+     * Загружает комментарии вопроса и собирает их в иерархическое дерево.
+     *
+     * @return array<int, array<string, mixed>> Дерево комментариев.
+     */
     private function getTree(): array
     {
         $comments = CommentQuestions::find()

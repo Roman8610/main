@@ -7,8 +7,21 @@ use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Сервис снятия опубликованного вопроса с публикации.
+ */
 class OffPublishMeetingQuestionService
 {
+    /**
+     * Переводит опубликованный вопрос в статус removed.
+     *
+     * @param OffPublishedMeetingQuestionForm $formModel
+     *     Валидированные данные операции.
+     * @return MeetingQuestion Снятый с публикации вопрос.
+     * @throws ForbiddenHttpException Если пользователь не может снять вопрос.
+     * @throws NotFoundHttpException Если вопрос не найден.
+     * @throws \Throwable Если сохранение не удалось.
+     */
     public function run(OffPublishedMeetingQuestionForm $formModel): MeetingQuestion
     {
         $userId = Yii::$app->user->id;

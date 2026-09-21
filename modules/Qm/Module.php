@@ -12,7 +12,6 @@ namespace app\modules\Qm;
  * Данные о совещаниях предоставляются путем интеграции с внешним модулем совещаний.
  *
  * Основные сущности:
- * - {@see \app\modules\Qm\models\Meeting} — совещание, к которому относится вопрос;
  * - {@see \app\modules\Qm\models\MeetingQuestion} — постановочный вопрос;
  * - {@see \app\modules\Qm\models\CommentQuestions} — комментарий к вопросу или другому комментарию.
  *

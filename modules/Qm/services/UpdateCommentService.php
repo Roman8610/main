@@ -7,8 +7,19 @@ use app\modules\Qm\models\CommentQuestions;
 use Yii;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Сервис изменения комментария.
+ */
 class UpdateCommentService
 {
+    /**
+     * Обновляет текст существующего комментария.
+     *
+     * @param UpdateCommentForm $formModel Валидированные данные комментария.
+     * @return CommentQuestions Обновленный комментарий.
+     * @throws NotFoundHttpException Если комментарий не найден.
+     * @throws \Throwable Если изменение запрещено или сохранение не удалось.
+     */
     public function run(UpdateCommentForm $formModel): CommentQuestions
     {
         $userId = Yii::$app->user->id;

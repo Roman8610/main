@@ -6,9 +6,10 @@ use app\modules\Qm\models\MeetingQuestion;
 use Override;
 
 /**
- * Принимает данные для создания/редактирования черновика постновочного вопроса
- * Валедирует данные
- * Используется для создания формы ActiveForm
+ * Данные формы создания и редактирования постановочного вопроса.
+ *
+ * Используется для валидации ActiveForm и передачи данных в сервисы
+ * сохранения черновика или отправки вопроса на модерацию.
  */
 
 class MeetingQuestionForm extends \yii\base\Model
@@ -53,6 +54,11 @@ class MeetingQuestionForm extends \yii\base\Model
         ];
     }
 
+    /**
+     * Заполняет форму данными существующего вопроса.
+     *
+     * @param MeetingQuestion $question Вопрос для редактирования.
+     */
     public function loadFromQuestion(MeetingQuestion $question): void
     {
         $this->setAttributes($question->attributes);

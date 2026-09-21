@@ -7,6 +7,9 @@ use app\modules\Qm\models\MeetingQuestion;
 use yii\web\NotFoundHttpException;
 use app\modules\Qm\enums\MeetingRole;
 
+/**
+ * Проверяет права пользователей на работу с постановочными вопросами.
+ */
 class MeetingQuestionAccessService
 {
     /**

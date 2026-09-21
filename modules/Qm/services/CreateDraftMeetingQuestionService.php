@@ -8,9 +8,21 @@ use app\modules\Qm\models\RecipientsQuestions;
 use Exception;
 use Yii;
 
+/**
+ * Сервис создания постановочного вопроса в статусе черновика.
+ */
 class CreateDraftMeetingQuestionService
 {
 
+    /**
+     * Создает вопрос и сохраняет его адресатов в рамках транзакции.
+     *
+     * @param MeetingQuestionForm $formModel Валидированные данные вопроса.
+     * @return MeetingQuestion Созданный вопрос в статусе draft.
+     * @throws \yii\web\ForbiddenHttpException Если пользователь не может
+     *     создать вопрос в совещании.
+     * @throws \Throwable Если сохранение вопроса или адресатов не удалось.
+     */
     public function run(MeetingQuestionForm $formModel): MeetingQuestion
     {
         if (!Yii::$app->getModule('Qm')->get('meetingQuestionAccessService')->canCreate($formModel->meeting_id, $formModel->user_id)) {

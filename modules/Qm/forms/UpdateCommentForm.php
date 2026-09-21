@@ -5,6 +5,9 @@ namespace app\modules\Qm\forms;
 use Override;
 use yii\base\Model;
 
+/**
+ * Данные формы редактирования комментария.
+ */
 class UpdateCommentForm extends Model {
     public $comment_id;
     public $question_id;

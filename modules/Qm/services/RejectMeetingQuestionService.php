@@ -8,8 +8,21 @@ use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Сервис отклонения постановочного вопроса модератором.
+ */
 class RejectMeetingQuestionService
 {
+    /**
+     * Переводит вопрос в статус rejected и сохраняет причину отклонения.
+     *
+     * @param RejectMeetingQuestionModerationForm $formModel
+     *     Валидированные данные модерации.
+     * @return MeetingQuestion Отклоненный вопрос.
+     * @throws ForbiddenHttpException Если пользователь не может модерировать вопрос.
+     * @throws NotFoundHttpException Если вопрос не найден.
+     * @throws \Throwable Если сохранение не удалось.
+     */
     public function run(RejectMeetingQuestionModerationForm $formModel): MeetingQuestion
     {
         $userId = Yii::$app->user->id;

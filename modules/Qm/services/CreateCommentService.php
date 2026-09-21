@@ -6,8 +6,19 @@ use app\modules\Qm\forms\CommentForm;
 use app\modules\Qm\models\CommentQuestions;
 use Yii;
 
+/**
+ * Сервис создания комментария к опубликованному вопросу.
+ */
 class CreateCommentService
 {
+    /**
+     * Создает комментарий или ответ на другой комментарий.
+     *
+     * @param CommentForm $formModel Валидированные данные комментария.
+     * @return CommentQuestions Созданный комментарий.
+     * @throws \yii\web\ForbiddenHttpException Если комментирование запрещено.
+     * @throws \Throwable Если комментарий не удалось сохранить.
+     */
     public function run(CommentForm $formModel): CommentQuestions
     {
         $userId = Yii::$app->user->id;

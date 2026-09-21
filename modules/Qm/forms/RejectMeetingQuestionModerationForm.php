@@ -5,6 +5,9 @@ namespace app\modules\Qm\forms;
 use yii\base\Model;
 use Override;
 
+/**
+ * Данные модерации для отклонения постановочного вопроса.
+ */
 class RejectMeetingQuestionModerationForm extends Model
 {
     public $comment_moderator;

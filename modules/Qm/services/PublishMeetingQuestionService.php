@@ -10,8 +10,21 @@ use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Сервис публикации постановочного вопроса после модерации.
+ */
 class PublishMeetingQuestionService
 {
+    /**
+     * Публикует вопрос и сохраняет выбранные отделы и направление.
+     *
+     * @param PublishedMeetingQuestionModerationForm $formModel
+     *     Валидированные данные модерации.
+     * @return MeetingQuestion Опубликованный вопрос.
+     * @throws ForbiddenHttpException Если пользователь не может модерировать вопрос.
+     * @throws NotFoundHttpException Если вопрос не найден.
+     * @throws \Throwable Если сохранение вопроса или отделов не удалось.
+     */
     public function run(PublishedMeetingQuestionModerationForm $formModel): MeetingQuestion
     {
         $userId = Yii::$app->user->id;

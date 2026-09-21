@@ -6,6 +6,12 @@ use yii\db\ActiveRecord;
 use Override;
 use yii\db\ActiveQuery;
 
+/**
+ * Постановочный вопрос, связанный с совещанием.
+ *
+ * Хранит содержание вопроса, его статус, автора, данные модерации
+ * и связи с адресатами, отделами и комментариями.
+ */
 class MeetingQuestion extends ActiveRecord
 {
     // Статусы постановочных вопросов
@@ -21,6 +27,11 @@ class MeetingQuestion extends ActiveRecord
         return 'meeting_questions';
     }
 
+    /**
+     * Возвращает список существующих статусов с их названиями.
+     *
+     * @return array<string, string> Соответствие кода статуса его названию.
+     */
     public static function getStatusLabels(): array
     {
         return [
@@ -32,6 +43,12 @@ class MeetingQuestion extends ActiveRecord
         ];
     }
 
+    /**
+     * Создает запрос вопросов конкретного совещания.
+     *
+     * @param int $meetingId Идентификатор совещания.
+     * @return ActiveQuery Запрос постановочных вопросов.
+     */
     public static function findByQuestions(int $meetingId): ActiveQuery
     {
         return self::find()->where(['meeting_id' => $meetingId]);

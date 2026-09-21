@@ -8,8 +8,20 @@ use app\modules\Qm\models\RecipientsQuestions;
 use Yii;
 use yii\web\ForbiddenHttpException;
 
+/**
+ * Сервис редактирования вопроса
+ */
 class UpdateDraftMeetingQuestionService
 {
+    /**
+     * Обновляет данные вопроса и его адресатов.
+     *
+     * @param MeetingQuestion $question Вопрос для изменения.
+     * @param MeetingQuestionForm $formModel Валидированные данные формы.
+     * @return MeetingQuestion Обновленный вопрос.
+     * @throws \yii\web\ForbiddenHttpException Если изменение запрещено.
+     * @throws \Throwable Если сохранение не удалось.
+     */
     public function run(MeetingQuestion $question, MeetingQuestionForm $formModel): MeetingQuestion
     {
         // Права уже проверены в контроллере, но необходимо дублирование защиты на случай обращения к сервису не из контроллера

@@ -2,6 +2,9 @@
 namespace app\modules\Qm\forms;
 use Override;
 
+/**
+ * Данные модерации для публикации постановочного вопроса.
+ */
 class PublishedMeetingQuestionModerationForm extends \yii\base\Model{
 
     public $departments = [];

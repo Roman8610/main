@@ -5,6 +5,9 @@ namespace app\modules\Qm\forms;
 use Override;
 use yii\base\Model;
 
+/**
+ * Данные формы создания комментария к постановочному вопросу.
+ */
 class CommentForm extends Model
 {
     public $question_id;

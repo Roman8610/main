@@ -4,6 +4,9 @@ namespace app\modules\Qm\models;
 
 use Override;
 
+/**
+ * Комментарий к постановочному вопросу или другому комментарию.
+ */
 class CommentQuestions extends \yii\db\ActiveRecord
 {
     public static function tableName()

@@ -4,11 +4,11 @@ namespace app\modules\Qm\forms;
 use yii\base\Model;
 
 /**
- * Принимает ID постановочного вопроса который необходимо отправить на модерацию
- * Валедирует данные
+ * Данные формы отправки постановочного вопроса на модерацию.
  */
 class SubmitMeetingQuestionModerationForm extends Model
 {
+    /** Сценарий операции отправки. */
     public $scenario;
     public $question_id;
 

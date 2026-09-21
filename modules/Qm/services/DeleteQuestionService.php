@@ -6,6 +6,9 @@ use app\modules\Qm\models\MeetingQuestion;
 use app\modules\Qm\models\RecipientsQuestions;
 use Yii;
 
+/**
+ * Сервис удаления постановочного вопроса и его адресатов.
+ */
 class DeleteQuestionService
 {
     /**
