@@ -114,10 +114,12 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'Qm/meetings' => 'Qm/meetings/index',
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['web/Qm/api/v1/meetings'],
-                ],
+                'Qm/api/v1/meetings' => 'Qm/api/v1/meetings/index',
+                'Qm/api/v1/meetings/<id:\d+>' => 'Qm/api/v1/meetings/view',
+                // [
+                //     'class' => 'yii\rest\UrlRule',
+                //     'controller' => ['Qm/api/v1/meetings'],
+                // ],
             ],
         ],
         /*
