@@ -116,6 +116,7 @@ $config = [
                 'Qm/meetings' => 'Qm/meetings/index',
                 'Qm/api/v1/meetings' => 'Qm/api/v1/meetings/index',
                 'Qm/api/v1/meetings/<id:\d+>' => 'Qm/api/v1/meetings/view',
+                'Qm/api/v1/meeting-question/get-question-by-meeting/<id:\d+>' => 'Qm/api/v1/meeting-question/get-question-by-meeting',
                 // [
                 //     'class' => 'yii\rest\UrlRule',
                 //     'controller' => ['Qm/api/v1/meetings'],
