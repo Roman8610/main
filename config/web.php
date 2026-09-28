@@ -65,7 +65,7 @@ $config = [
                 'deleteCommentService' => [
                     'class' => DeleteCommentService::class,
                 ],
-                'updateCommentService' =>[
+                'updateCommentService' => [
                     'class' => UpdateCommentService::class,
                 ],
             ]
@@ -114,6 +114,10 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'Qm/meetings' => 'Qm/meetings/index',
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['web/Qm/api/v1/meetings'],
+                ],
             ],
         ],
         /*
