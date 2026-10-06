@@ -61,6 +61,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        // $p = file_get_contents( \Yii::getAlias('@app/modules/Qm/doc/ai-promt-v1.txt'));
+        // dump($p);die;
         return $this->render('index');
     }
 

@@ -20,7 +20,7 @@ class MeetingsController extends ApiController
      */
     public function actionIndex(): array
     {
-
+// curl.exe -i -H "Authorization: Bearer 101-token" "http://yiitest.loc/Qm/api/v1/meetings/index"
         $meetings = Meeting::find()->asArray()->all();
 
         return [
