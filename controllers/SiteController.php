@@ -63,6 +63,27 @@ class SiteController extends Controller
     {
         // $p = file_get_contents( \Yii::getAlias('@app/modules/Qm/doc/ai-promt-v1.txt'));
         // dump($p);die;
+
+        // $payload = [
+        //     'modelUri' => 'gpt://123123/yandexgpt/latest',
+        //     'completionOptions' => [
+        //         'temperature' => 0.7,
+        //         'maxTokens' => 150,
+        //     ],
+        //     'messages' => [
+        //         [
+        //             'role' => 'user',
+        //             'text' => 'Покажи все постановочные вопросы',
+        //         ],
+        //     ],
+        // ];
+
+        // $j = json_encode($payload, JSON_UNESCAPED_UNICODE);
+
+        // dump($j);
+        // dump($payload);die;
+
+
         return $this->render('index');
     }
 

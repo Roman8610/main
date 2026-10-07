@@ -12,6 +12,7 @@ use Yii;
 
 class AiChatController extends ApiController
 {
+
     public function actionExecute()
     {
         $iamToken = Yii::$app->params['iamToken'];
@@ -29,14 +30,17 @@ class AiChatController extends ApiController
             ],
             'messages' => [
                 [
+                    'role' => 'system',
+                    'text' => file_get_contents( \Yii::getAlias('@app/modules/Qm/doc/ai-promt-v1-test.txt')),
+                ],
+                [
                     'role' => 'user',
-                    'text' => 'Сколько звезд на небе?',
+                    'text' => 'Сколько звезд на небе ?',
                 ],
             ],
         ];
 
-       $url = 'https://llm.api.cloud.yandex.net/foundationModels/v1/completion';
-        
+        $url = 'https://llm.api.cloud.yandex.net/foundationModels/v1/completion';
 
         $ch = curl_init();
         curl_setopt_array($ch, [
