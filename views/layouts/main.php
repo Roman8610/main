@@ -5,6 +5,7 @@
 
 use app\assets\AppAsset;
 use app\widgets\Alert;
+use app\widgets\ChatWidget;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
@@ -59,34 +60,151 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     . '</li>'
             ]
         ]);
+        echo Html::button('Скрыть чат', [
+            'id' => 'sidebar-chat-toggle',
+            'class' => 'btn btn-outline-light ms-auto',
+            'type' => 'button',
+            'aria-controls' => 'sidebar-chat',
+            'aria-expanded' => 'true',
+        ]);
         NavBar::end();
         ?>
     </header>
 
-    <?php if (Yii::$app->session->hasFlash('success')): ?>
-        <div class="alert alert-success" style="scroll-margin-top: 80px">
-            <?= Yii::$app->session->getFlash('success') ?>
-        </div>
-    <?php endif; ?>
+    <style>
+        body {
+            padding-top: 0;
+        }
 
-    <main id="main" class="flex-shrink-0" role="main">
-        <div class="container">
-            <?php if (!empty($this->params['breadcrumbs'])): ?>
-                <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-            <?php endif ?>
-            <?= Alert::widget() ?>
-            <?= $content ?>
-        </div>
-    </main>
+        .sidebar-chat {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 30vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            z-index: 1020;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid #d3d3d3;
+            border-radius: 8px;
+        }
 
-    <footer id="footer" class="mt-auto py-3 bg-light">
-        <div class="container">
-            <div class="row text-muted">
-                <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-                <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+        .sidebar-chat-form {
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .sidebar-chat-dialog {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-chat-message {
+            max-width: 85%;
+            padding: 0.6rem 0.8rem;
+            border-radius: 0.75rem;
+            overflow-wrap: anywhere;
+        }
+
+        .sidebar-chat-message-incoming {
+            align-self: flex-start;
+            background: #f1f3f5;
+        }
+
+        .sidebar-chat-message-outgoing {
+            align-self: flex-end;
+            background: #dbeafe;
+        }
+
+        body.chat-hidden .sidebar-chat {
+            display: none;
+        }
+
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            width: calc(100vw - 30vw);
+            max-width: calc(100vw - 30vw);
+            min-height: 100vh;
+            box-sizing: border-box;
+            padding-top: 72px;
+            padding-right: 1.5rem;
+        }
+
+        #header .navbar {
+            width: calc(100vw - 31vw);
+        }
+
+        body.chat-hidden .page-content {
+            width: 100vw;
+            max-width: 100vw;
+            padding-right: 0;
+        }
+
+        body.chat-hidden #header .navbar {
+            width: 100vw;
+        }
+
+        .page-content main {
+            flex-grow: 1;
+        }
+
+        .page-content .container {
+            width: 100%;
+            max-width: none;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        </style>
+
+    <aside id="sidebar-chat" class="sidebar-chat" aria-label="Чат">
+        <?= ChatWidget::widget() ?>
+    </aside>
+
+    <div class="page-content">
+        <main id="main" class="flex-shrink-0" role="main">
+            <div class="container">
+                <?php if (Yii::$app->session->hasFlash('success')): ?>
+                    <div class="alert alert-success" style="scroll-margin-top: 80px">
+                        <?= Yii::$app->session->getFlash('success') ?>
+                    </div>
+                <?php endif; ?>
+                <?php if (!empty($this->params['breadcrumbs'])): ?>
+                    <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+                <?php endif ?>
+                <?= Alert::widget() ?>
+                <?= $content ?>
             </div>
-        </div>
-    </footer>
+        </main>
+
+        <footer id="footer" class="mt-auto py-3 bg-light">
+            <div class="container">
+                <div class="row text-muted">
+                    <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
+                    <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <?php
+    $this->registerJs(<<<'JS'
+        const chatToggle = document.getElementById('sidebar-chat-toggle');
+        const chatPanel = document.getElementById('sidebar-chat');
+
+        chatToggle.addEventListener('click', () => {
+            const isHidden = document.body.classList.toggle('chat-hidden');
+            chatToggle.textContent = isHidden ? 'Показать чат' : 'Скрыть чат';
+            chatToggle.setAttribute('aria-expanded', String(!isHidden));
+            chatPanel.setAttribute('aria-hidden', String(isHidden));
+        });
+    JS);
+    ?>
 
     <?php $this->endBody() ?>
 </body>
