@@ -4,6 +4,8 @@
 <?php use kartik\form\ActiveForm;
 use kartik\icons\Icon;
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 ?>
 <div class="sidebar-chat-dialog" aria-label="Пример диалога">
     <div class="sidebar-chat-message sidebar-chat-message-incoming">
@@ -55,7 +57,10 @@ use yii\helpers\Html;
         <div><?= Html::encode('Спасибо, буду вовремя!') ?></div>
     </div>
 </div>
-<?php $form = ActiveForm::begin(['options' => ['class' => 'sidebar-chat-form']]);?>
+<?php $form = ActiveForm::begin([
+    'options' => ['class' => 'sidebar-chat-form'],
+    'action' => Url::to(['/Qm/api/v1/ai-chat/execute'])
+    ]);?>
 <?= $form->field($modelForm, 'text')->textarea(['rows' => 6])->label(false) ?>
 <?= Html::submitButton(Icon::show('arrow-up'), ['class' => 'btn btn-primary', 'name' => 'contact-button'])?>
 <?php ActiveForm::end(); ?>
