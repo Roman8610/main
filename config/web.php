@@ -8,6 +8,7 @@ use app\modules\Qm\services\DeleteQuestionService;
 use app\modules\Qm\services\MeetingQuestionAccessService;
 use app\modules\Qm\services\MeetingQuestionVisibilityFilterService;
 use app\modules\Qm\services\OffPublishMeetingQuestionService;
+use app\modules\Qm\services\ProcessChatMessageService;
 use app\modules\Qm\services\SubmitForModerationService;
 use app\modules\Qm\services\UpdateAndSubmitForModerationService;
 use app\modules\Qm\services\UpdateDraftMeetingQuestionService;
@@ -67,6 +68,9 @@ $config = [
                 ],
                 'updateCommentService' => [
                     'class' => UpdateCommentService::class,
+                ],
+                'processChatMessageService' => [
+                    'class' => ProcessChatMessageService::class,
                 ],
             ]
         ],
