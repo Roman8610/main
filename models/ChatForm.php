@@ -8,7 +8,9 @@ use yii\base\Model;
 
 class ChatForm extends Model{
 
-    public $text;
+    public string $text;
+    public int $user_id;
+    public string $role;
 
     #[Override]
     public function rules()

@@ -5,6 +5,8 @@ use app\modules\Qm\services\CreateCommentService;
 use app\modules\Qm\services\CreateDraftMeetingQuestionService;
 use app\modules\Qm\services\DeleteCommentService;
 use app\modules\Qm\services\DeleteQuestionService;
+use app\modules\Qm\services\GetAnswerAiService;
+use app\modules\Qm\services\GetMessagesChatService;
 use app\modules\Qm\services\MeetingQuestionAccessService;
 use app\modules\Qm\services\MeetingQuestionVisibilityFilterService;
 use app\modules\Qm\services\OffPublishMeetingQuestionService;
@@ -14,6 +16,8 @@ use app\modules\Qm\services\UpdateAndSubmitForModerationService;
 use app\modules\Qm\services\UpdateDraftMeetingQuestionService;
 use app\modules\Qm\services\PublishMeetingQuestionService;
 use app\modules\Qm\services\RejectMeetingQuestionService;
+use app\modules\Qm\services\SaveMessageAndGetStoryService;
+use app\modules\Qm\services\SaveMessageService;
 use app\modules\Qm\services\UpdateCommentService;
 
 $params = require __DIR__ . '/params.php';
@@ -71,6 +75,18 @@ $config = [
                 ],
                 'processChatMessageService' => [
                     'class' => ProcessChatMessageService::class,
+                ],
+                'saveMessageAndGetStoryService' => [
+                    'class' => SaveMessageAndGetStoryService::class,
+                ],
+                'getAnswerAiService' => [
+                    'class' => GetAnswerAiService::class,
+                ],
+                'saveMessageService' => [
+                    'class' => SaveMessageService::class,
+                ],
+                'getMessagesChatService' => [
+                    'class' => GetMessagesChatService::class,
                 ],
             ]
         ],

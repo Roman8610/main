@@ -43,6 +43,7 @@ class AiChatController extends ApiController
         $form = new ChatForm();
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            $form->user_id = (int)Yii::$app->user->id;
             $service = Yii::$app->getModule('Qm')->get('processChatMessageService');
             $result = $service->run($form);
 

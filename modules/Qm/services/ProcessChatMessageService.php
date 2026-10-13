@@ -4,14 +4,23 @@ namespace app\modules\Qm\services;
 
 use app\models\ChatForm;
 use app\modules\Qm\dto\ChatMessageResult;
+use Yii;
 
 class ProcessChatMessageService {
 
     public function run(ChatForm $formModel): ChatMessageResult{
-
-            // вызываем сервис который сохраняет историю сообщений чата
+            // Сохранили последенее сообщение пользователя и получили историю его сообщений
+            $story = Yii::$app->getModule('Qm')->get('saveMessageAndGetStoryService')->run($formModel);
             // вызываем сервис который делает запрос к ИИ и возвращает ответ
-            // вызываем сервис который разбирает ответ ИИ (в зависимости от результата, вызывает нужные сервисы), возвращает сообщение от ИИ
+            // Этот сервис внутри должен вызвать последовательно сервисы получения ответа от ИИ и извлечения сообщения из ответа
+            $messageAi = Yii::$app->getModule('Qm')->get('getAnswerAiAndExtractsMessageService')->run($story);
+
+            // Перезаписываем данные в $formModel
+            // Валедируем данные в $formModel
+            // Вызваем сервис сохранения сообщения
+
+
+           
             return new ChatMessageResult('сообщение', $type = null, $data = []);
     }
 
