@@ -3,17 +3,23 @@
 namespace app\modules\Qm\services;
 
 use app\models\ChatForm;
-use app\modules\Qm\dto\ChatMessageResult;
 use Yii;
-
+/**
+ * Главные орекстратор, последовательно вызывает сервисы:
+ * - сохраняет запрос пользователя в БД
+ * - вызывает оркестратор MCP‑агент
+ */
 class ProcessChatMessageService {
 
-    public function run(ChatForm $formModel): ChatMessageResult{
+    public function run(ChatForm $formModel){
             // Сохранили последенее сообщение пользователя и получили историю его сообщений
-            $story = Yii::$app->getModule('Qm')->get('saveMessageAndGetStoryService')->run($formModel);
+            Yii::$app->getModule('Qm')->get('saveMessageAndGetStoryService')->run($formModel);
             // вызываем сервис который делает запрос к ИИ и возвращает ответ
-            // Этот сервис внутри должен вызвать последовательно сервисы получения ответа от ИИ и преобразования ответа в объект DTO
-            $DtoAi = Yii::$app->getModule('Qm')->get('getAnswerAiAndTransformToDTOService')->run($story);
+            // Этот сервис внутри должен вызвать последовательно сервисы получения ответа от ИИ и записи ответа в БД
+            // вызывает сервис который выполнит инструкцию ИИ
+            // сервис который отправит в ии результаты выполненой операции и  получит ответ
+            // 
+            Yii::$app->getModule('Qm')->get('getAnswerAiAndSaveService')->run($formModel);
 
             // Перезаписываем данные в $formModel, станавливаем роль ассистента и текст ответа ИИ
             // Валедируем данные в $formModel
@@ -26,9 +32,6 @@ class ProcessChatMessageService {
             // Сохраняем результат в БД
             // 
 
-
-           
-            return new ChatMessageResult('сообщение', $type = null, $data = []);
     }
 
 }

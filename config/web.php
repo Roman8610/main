@@ -5,6 +5,8 @@ use app\modules\Qm\services\CreateCommentService;
 use app\modules\Qm\services\CreateDraftMeetingQuestionService;
 use app\modules\Qm\services\DeleteCommentService;
 use app\modules\Qm\services\DeleteQuestionService;
+use app\modules\Qm\services\ExtractAnswerAiService;
+use app\modules\Qm\services\GetAnswerAiAndSaveService;
 use app\modules\Qm\services\GetAnswerAiService;
 use app\modules\Qm\services\GetMessagesChatService;
 use app\modules\Qm\services\MeetingQuestionAccessService;
@@ -87,6 +89,12 @@ $config = [
                 ],
                 'getMessagesChatService' => [
                     'class' => GetMessagesChatService::class,
+                ],
+                'getAnswerAiAndSaveService' => [
+                    'class' => GetAnswerAiAndSaveService::class
+                ],
+                'extractAnswerAiService' => [
+                    'class' => ExtractAnswerAiService::class
                 ],
             ]
         ],

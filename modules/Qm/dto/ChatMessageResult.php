@@ -2,10 +2,10 @@
 
 namespace app\modules\Qm\dto;
 
-final class ChatMessageResult{
+final class AnswerAiDTO{
         public function __construct(
         public readonly string $message,
-        public readonly string|null $type = null,
-        public readonly array $data = [],
+        public readonly string $action = '',
+        public readonly array $param = [],
     ) {}
 }
