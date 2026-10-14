@@ -3,6 +3,7 @@
 namespace app\modules\Qm\controllers\api\v1;
 
 use app\models\ChatForm;
+use app\modules\Qm\models\AiChatMessages;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\UnauthorizedHttpException;
@@ -44,16 +45,10 @@ class AiChatController extends ApiController
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             $form->user_id = (int)Yii::$app->user->id;
-            $service = Yii::$app->getModule('Qm')->get('processChatMessageService');
-            $result = $service->run($form);
-
-            // Проверяем значение свойств $result->type
-
-            // перезагружаем страницу чтобы обновить чат
+            Yii::$app->getModule('Qm')->get('processChatMessageService')->run($form);
         }
 
-        return $this->render('index', [
-            'form' => $form,
-        ]);
+        return $this->redirect(Yii::$app->request->referrer ?: '/');
     }
+
 }

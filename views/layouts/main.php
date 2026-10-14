@@ -99,9 +99,22 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
         .sidebar-chat-dialog {
             display: flex;
+            flex: 1;
             flex-direction: column;
             gap: 0.75rem;
             margin-bottom: 1rem;
+        }
+
+        .sidebar-chat-dialog-empty {
+            justify-content: center;
+        }
+
+        .sidebar-chat-empty-state {
+            text-align: center;
+        }
+
+        .sidebar-chat-dialog-messages {
+            justify-content: flex-end;
         }
 
         .sidebar-chat-message {
