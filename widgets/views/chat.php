@@ -17,13 +17,13 @@ use yii\helpers\Url;
             <?php if ($message->role == 'user'): ?>
                 <div class="sidebar-chat-message sidebar-chat-message-outgoing">
                     <strong>Иван</strong>
-                    <div><?= Html::encode($message->content) ?></div>
+                    <div><?= Html::encode($message->text) ?></div>
                 </div>
             <?php endif; ?>
-            <?php if ($message->role == 'assistent'): ?>
+            <?php if ($message->role == 'assistant'): ?>
                 <div class="sidebar-chat-message sidebar-chat-message-incoming">
-                    <strong>Портал</strong>
-                    <div><?= Html::encode($message->content) ?></div>
+                    <strong>ИИ-ассистент</strong>
+                    <div><?= Html::encode($message->text) ?></div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>

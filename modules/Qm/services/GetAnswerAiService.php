@@ -11,7 +11,7 @@ class GetAnswerAiService
     /**
      * Получает ответ от ИИ
      */
-    public function run(ChatForm $formModel)
+    public function run(array $context)
     {
         $iamToken = Yii::$app->params['iamToken'];
         $folderId = Yii::$app->params['folderId'];
@@ -26,16 +26,8 @@ class GetAnswerAiService
                 'temperature' => 0.7,
                 'maxTokens' => 150,
             ],
-            'messages' => [
-                [
-                    'role' => 'system',
-                    'text' => file_get_contents(\Yii::getAlias('@app/modules/Qm/doc/ai-promt-v1-test.txt')),
-                ],
-                [
-                    'role' => 'user',
-                    'text' => $formModel->text,
-                ],
-            ],
+            'messages' => $context,
+
         ];
 
         $url = 'https://llm.api.cloud.yandex.net/foundationModels/v1/completion';

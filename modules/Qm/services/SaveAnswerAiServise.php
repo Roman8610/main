@@ -2,20 +2,20 @@
 
 namespace app\modules\Qm\services;
 
-use app\models\ChatForm;
+use app\modules\Qm\dto\AnswerAiDTO;
 use app\modules\Qm\models\AiChatMessages;
+use Yii;
 
-class SaveMessageService
+class SaveAnswerAiServise
 {
-    /**
-     * Сохраняет новое сообщение
-     */
-    public function run(ChatForm $formModel): AiChatMessages
+    public function run(AnswerAiDTO $ansverDto): AiChatMessages
     {
         $model = new AiChatMessages();
-        $model->user_id = $formModel->user_id;
-        $model->role = $formModel->role;
-        $model->content = $formModel->text;
+        $model->user_id = Yii::$app->user->id;
+        $model->role = 'assistant';
+        $model->text = $ansverDto->message;
+        $model->action = $ansverDto->action;
+        $model->params = json_encode($ansverDto->param);
         $model->created_at = date('Y-m-d H:i:s');
 
         if (!$model->save()) {

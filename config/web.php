@@ -8,18 +8,20 @@ use app\modules\Qm\services\DeleteQuestionService;
 use app\modules\Qm\services\ExtractAnswerAiService;
 use app\modules\Qm\services\GetAnswerAiAndSaveService;
 use app\modules\Qm\services\GetAnswerAiService;
-use app\modules\Qm\services\GetMessagesChatService;
+use app\modules\Qm\services\MainOrchestratorChatService;
+use app\modules\Qm\services\McpOrchestratorService;
 use app\modules\Qm\services\MeetingQuestionAccessService;
 use app\modules\Qm\services\MeetingQuestionVisibilityFilterService;
 use app\modules\Qm\services\OffPublishMeetingQuestionService;
-use app\modules\Qm\services\ProcessChatMessageService;
 use app\modules\Qm\services\SubmitForModerationService;
 use app\modules\Qm\services\UpdateAndSubmitForModerationService;
 use app\modules\Qm\services\UpdateDraftMeetingQuestionService;
 use app\modules\Qm\services\PublishMeetingQuestionService;
 use app\modules\Qm\services\RejectMeetingQuestionService;
+use app\modules\Qm\services\SaveAnswerAiServise;
 use app\modules\Qm\services\SaveMessageAndGetStoryService;
 use app\modules\Qm\services\SaveMessageService;
+use app\modules\Qm\services\SaveMessageUserService;
 use app\modules\Qm\services\UpdateCommentService;
 
 $params = require __DIR__ . '/params.php';
@@ -75,8 +77,8 @@ $config = [
                 'updateCommentService' => [
                     'class' => UpdateCommentService::class,
                 ],
-                'processChatMessageService' => [
-                    'class' => ProcessChatMessageService::class,
+                'mainOrchestratorChatService' => [
+                    'class' => MainOrchestratorChatService::class,
                 ],
                 'saveMessageAndGetStoryService' => [
                     'class' => SaveMessageAndGetStoryService::class,
@@ -84,17 +86,20 @@ $config = [
                 'getAnswerAiService' => [
                     'class' => GetAnswerAiService::class,
                 ],
-                'saveMessageService' => [
-                    'class' => SaveMessageService::class,
-                ],
-                'getMessagesChatService' => [
-                    'class' => GetMessagesChatService::class,
+                'saveMessageUserService' => [
+                    'class' => SaveMessageUserService::class,
                 ],
                 'getAnswerAiAndSaveService' => [
-                    'class' => GetAnswerAiAndSaveService::class
+                    'class' => GetAnswerAiAndSaveService::class,
                 ],
                 'extractAnswerAiService' => [
-                    'class' => ExtractAnswerAiService::class
+                    'class' => ExtractAnswerAiService::class,
+                ],
+                'mcpOrchestratorService' => [
+                    'class' => McpOrchestratorService::class,
+                ],
+                'saveAnswerAiServise' => [
+                    'class' => SaveAnswerAiServise::class,
                 ],
             ]
         ],
