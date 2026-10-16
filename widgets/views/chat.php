@@ -44,10 +44,10 @@ use yii\helpers\Url;
     <?= Html::submitButton(Icon::show('arrow-up'), ['class' => 'btn btn-primary', 'name' => 'contact-button', 'form' => 'sidebar-chat-form']) ?>
     <?php
     echo Html::beginForm(['/Qm/api/v1/ai-chat/delete'], 'post', ['style' => 'display: inline'])
-        . Html::hiddenInput('user_id', 200)
+        . Html::hiddenInput('user_id', Yii::$app->user->id)
         . Html::submitButton(Icon::show('trash'), [
             'class' => 'btn btn-secondary',
-            'title' => Icon::show('trash') . 'Очистить чат',
+            'title' => 'Очистить чат',
             'encode' => false,
             'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
         ])

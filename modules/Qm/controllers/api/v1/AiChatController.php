@@ -3,6 +3,7 @@
 namespace app\modules\Qm\controllers\api\v1;
 
 use app\models\ChatForm;
+use app\models\ChatFormDelete;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\UnauthorizedHttpException;
@@ -57,8 +58,16 @@ class AiChatController extends ApiController
         return $this->redirect(Yii::$app->request->referrer ?: '/');
     }
 
-    public function actionDelete(){
-        dump('dcsdc');
-        die;
+    public function actionDelete()
+    {
+        $form = new ChatFormDelete();
+        $form->user_id = Yii::$app->request->post('user_id');
+        if ($form->validate()) {
+            if(Yii::$app->getModule('Qm')->get('chatAccessService')->canDelete($form->user_id))
+                {
+                    Yii::$app->getModule('Qm')->get('deleteStoryChatService')->run($form);
+                }
+        }
+        return $this->redirect(Yii::$app->request->referrer ?: '/');
     }
 }

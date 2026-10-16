@@ -1,5 +1,7 @@
 <?php
 
+use app\modules\Qm\services\chat\ChatAccessService;
+use app\modules\Qm\services\chat\DeleteStoryChatService;
 use app\modules\Qm\services\CreateAndSubmitForModerationService;
 use app\modules\Qm\services\CreateCommentService;
 use app\modules\Qm\services\CreateDraftMeetingQuestionService;
@@ -100,6 +102,12 @@ $config = [
                 ],
                 'saveAnswerAiServise' => [
                     'class' => SaveAnswerAiServise::class,
+                ],
+                'chatAccessService' => [
+                    'class' => ChatAccessService::class,
+                ],
+                'deleteStoryChatService' => [
+                    'class' => DeleteStoryChatService::class,
                 ],
             ]
         ],

@@ -4,7 +4,6 @@ namespace app\modules\Qm\controllers\api\v1;
 
 use app\modules\Qm\models\MeetingQuestion;
 use Yii;
-use yii\web\ForbiddenHttpException;
 
 class MeetingQuestionController extends ApiController
 {
