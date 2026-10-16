@@ -35,9 +35,22 @@ use yii\helpers\Url;
     <?php endif; ?>
 </div>
 <?php $form = ActiveForm::begin([
-    'options' => ['class' => 'sidebar-chat-form'],
+    'options' => ['class' => 'sidebar-chat-form', 'id' => 'sidebar-chat-form'],
     'action' => Url::to(['/Qm/api/v1/ai-chat/execute'])
 ]); ?>
 <?= $form->field($modelForm, 'text')->textarea(['rows' => 6])->label(false) ?>
-<?= Html::submitButton(Icon::show('arrow-up'), ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
 <?php ActiveForm::end(); ?>
+<div class="d-flex justify-content-between align-items-center gap-2 mt-2">
+    <?= Html::submitButton(Icon::show('arrow-up'), ['class' => 'btn btn-primary', 'name' => 'contact-button', 'form' => 'sidebar-chat-form']) ?>
+    <?php
+    echo Html::beginForm(['/Qm/api/v1/ai-chat/delete'], 'post', ['style' => 'display: inline'])
+        . Html::hiddenInput('user_id', 200)
+        . Html::submitButton(Icon::show('trash'), [
+            'class' => 'btn btn-secondary',
+            'title' => Icon::show('trash') . 'Очистить чат',
+            'encode' => false,
+            'onclick' => "return confirm('Вы уверены, что хотите удалить эту запись?')",
+        ])
+        . Html::endForm();
+    ?>
+</div>

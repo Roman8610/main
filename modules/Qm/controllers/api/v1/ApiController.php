@@ -2,7 +2,6 @@
 
 namespace app\modules\Qm\controllers\api\v1;
 
-use Yii;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\Controller;

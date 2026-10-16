@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\Qm\services;
+namespace app\modules\Qm\services\chat;
 
 use app\modules\Qm\dto\AnswerAiDTO;
 

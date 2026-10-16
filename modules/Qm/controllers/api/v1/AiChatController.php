@@ -3,7 +3,6 @@
 namespace app\modules\Qm\controllers\api\v1;
 
 use app\models\ChatForm;
-use app\modules\Qm\models\AiChatMessages;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\UnauthorizedHttpException;
@@ -36,6 +35,12 @@ class AiChatController extends ApiController
             'roles' => ['@'],
         ];
 
+        $behaviors['access']['rules'][] = [
+            'actions' => ['delete'],
+            'allow' => true,
+            'roles' => ['@'],
+        ];
+
         return $behaviors;
     }
 
@@ -50,5 +55,10 @@ class AiChatController extends ApiController
         }
 
         return $this->redirect(Yii::$app->request->referrer ?: '/');
+    }
+
+    public function actionDelete(){
+        dump('dcsdc');
+        die;
     }
 }

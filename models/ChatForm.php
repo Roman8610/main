@@ -1,12 +1,12 @@
 <?php
 
-
 namespace app\models;
 
 use Override;
 use yii\base\Model;
 
-class ChatForm extends Model{
+class ChatForm extends Model
+{
 
     public $text;
     public $user_id;
@@ -20,5 +20,4 @@ class ChatForm extends Model{
             [['text'], 'required'],
         ];
     }
-
 }
