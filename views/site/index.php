@@ -2,6 +2,8 @@
 
 /** @var yii\web\View $this */
 
+use app\modules\Qm\models\AiChatMessages;
+
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
@@ -15,6 +17,19 @@ $this->title = 'My Yii Application';
     </div>
 
     <div class="body-content">
+
+        <?php
+        $context = AiChatMessages::find()
+            ->select(['role', 'text', 'created_at'])
+            ->where(['user_id' => Yii::$app->user->id])
+            ->limit(5)
+            ->asArray()
+            ->orderBy(['created_at' => SORT_DESC])
+            ->all();
+
+        dump($context);
+
+        ?>
 
         <div class="row">
             <div class="col-lg-4 mb-3">

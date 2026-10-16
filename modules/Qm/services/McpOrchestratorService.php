@@ -22,7 +22,7 @@ use Yii;
  */
 class McpOrchestratorService
 {
-    private $limit = 5;
+    private $limit = 20;
     public function run()
     {
         $n = 0;
@@ -36,11 +36,15 @@ class McpOrchestratorService
             $context = AiChatMessages::find()
                 ->select(['role', 'text', 'created_at'])
                 ->where(['user_id' => Yii::$app->user->id])
-                ->limit($this->limit)->asArray()
-                ->orderBy('created_at')
+                ->limit($this->limit)
+                ->asArray()
+                ->orderBy(['created_at' => SORT_DESC])
                 ->all();
 
-            array_unshift($context,  $promt);
+            // Берём последние N сообщений (по убыванию даты), затем восстанавливаем хронологический порядок
+            $context = array_reverse($context);
+
+            array_unshift($context, $promt);
 
             // сервис обращения к ИИ, получаем сырые данные от ИИ
             $dataJson = Yii::$app->getModule('Qm')->get('getAnswerAiService')->run($context);
@@ -61,7 +65,7 @@ class McpOrchestratorService
                 // выполняем сохранение системных данных о том что у ИИ не получилось обработать запрос
                 // попробуйте сформулировать вопрос по другому 
             }
-        } while ($n > 4);
+        } while ($n < $this->limit);
     }
 
     private function isAction(): bool
