@@ -2,6 +2,7 @@
 
 use app\modules\Qm\services\chat\ChatAccessService;
 use app\modules\Qm\services\chat\DeleteStoryChatService;
+use app\modules\Qm\services\chat\ExecutionActionServece;
 use app\modules\Qm\services\CreateAndSubmitForModerationService;
 use app\modules\Qm\services\CreateCommentService;
 use app\modules\Qm\services\CreateDraftMeetingQuestionService;
@@ -109,6 +110,9 @@ $config = [
                 'deleteStoryChatService' => [
                     'class' => DeleteStoryChatService::class,
                 ],
+                'executionActionServece' => [
+                    'class' => ExecutionActionServece::class,
+                ]
             ]
         ],
     ],

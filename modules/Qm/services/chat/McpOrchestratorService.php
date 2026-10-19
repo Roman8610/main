@@ -12,7 +12,7 @@ use Yii;
  * Оркестратор запускает цикл обращений к ИИ:
  *   Начало цикла обращений к ИИ
  * - Получаем историю польльзователя из БД
- * - Подготавливаем историю к передаче в ИИ (приватный метод)
+ * - Подготавливаем историю к передаче в ИИ
  * - Сервис получения сырых данных от ИИ
  * - Сервис сохранения данных ИИ в БД
  * Завершение цикла
@@ -51,26 +51,19 @@ class McpOrchestratorService
 
             // выполняем экстракцию данных
             $dataDto = $this->extractMessage($dataJson);
+
             // выполняем сохранение ответа ИИ
             Yii::$app->getModule('Qm')->get('saveAnswerAiServise')->run($dataDto);
 
-            if (!$this->isAction()) {
+            if (!Yii::$app->getModule('Qm')->get('executionActionServece')->run($dataDto)) {
                 break;
             }
-
-            // Запускаем сервис выполнение инструкций 
-
 
             if ($this->isDuble()) {
                 // Если ии начал дублировать ответы, выполняем сохранение системных данных о том что у ИИ не получилось обработать запрос
                 // попробуйте сформулировать вопрос по другому 
             }
         } while ($n < $this->limit);
-    }
-
-    private function isAction(): bool
-    {
-        return false;
     }
 
     private function isDuble(): bool
@@ -95,15 +88,15 @@ class McpOrchestratorService
 
             $answerArray = json_decode($cleanJsonString, true);
 
-            $action = null;
-            $params = [];
-
             if (is_array($answerArray) && json_last_error() === JSON_ERROR_NONE) {
                 $message = $answerArray['message'] ?? '';
+                $service = $answerArray['service'] ?? '';
                 $action = $answerArray['action'] ?? '';
                 $params = $answerArray['params'] ?? [];
 
-                return new AnswerAiDTO($message, $action, $params);
+               // var_dump($action); die;
+
+                return new AnswerAiDTO($message, $service, $action, $params);
             }
         }
 
