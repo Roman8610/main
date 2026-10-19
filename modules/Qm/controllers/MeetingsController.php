@@ -19,7 +19,10 @@ class MeetingsController extends Controller
             throw new \yii\web\ForbiddenHttpException('Вы не авторизованы.');
         }
         $modelSearch = new MeetingSearch();
-        $dataProvider = $modelSearch->search();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' =>$modelSearch->search(),
+        ]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);

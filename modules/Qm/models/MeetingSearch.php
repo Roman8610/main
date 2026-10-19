@@ -2,7 +2,7 @@
 
 namespace app\modules\Qm\models;
 
-use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 
 /**
  * Поисковая модель списка совещаний.
@@ -12,16 +12,12 @@ class MeetingSearch extends Meeting
     /**
      * Создает провайдер данных для списка совещаний.
      *
-     * @return ActiveDataProvider Провайдер данных совещаний.
+     * @return ActiveQuery Провайдер данных совещаний.
      */
-    public function search(): ActiveDataProvider
+    public function search(): ActiveQuery
     {
         $query = Meeting::find();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        return $dataProvider;
+        return $query;
     }
 }
