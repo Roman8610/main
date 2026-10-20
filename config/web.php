@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\Qm\services\chat\actions\agent\ActionExecutor;
 use app\modules\Qm\services\chat\ChatAccessService;
 use app\modules\Qm\services\chat\DeleteStoryChatService;
 use app\modules\Qm\services\chat\ExecutionActionServece;
@@ -112,6 +113,9 @@ $config = [
                 ],
                 'executionActionServece' => [
                     'class' => ExecutionActionServece::class,
+                ],
+                'actionExecutor' => [
+                    'class' => ActionExecutor::class,
                 ]
             ]
         ],
