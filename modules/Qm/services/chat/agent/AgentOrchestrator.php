@@ -61,7 +61,7 @@ final class AgentOrchestrator
 
             $executedActions[$key] = true;
 
-            // Новый/переработанный исполнитель должен вернуть структурированный результат.
+            // Исполнитель должен вернуть структурированный результат.
             $lastActionResult = $module->get('actionExecutor')->run($plan);
         }
 

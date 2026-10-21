@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\Qm\services\chat\actions\agent;
+namespace app\modules\Qm\services\chat\actions;
 
 use app\modules\Qm\dto\ActionResultDTO;
 use app\modules\Qm\dto\AnswerAiDTO;

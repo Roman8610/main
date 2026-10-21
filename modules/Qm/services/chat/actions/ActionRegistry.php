@@ -1,8 +1,8 @@
 <?php
 
-namespace app\modules\Qm\services\chat\actions\agent;
+namespace app\modules\Qm\services\chat\actions;
 
-use app\modules\Qm\services\chat\actions\ActionInterface;
+use app\modules\Qm\services\chat\adapters\AdapterInterface;
 use InvalidArgumentException;
 use UnexpectedValueException;
 use Yii;
@@ -15,7 +15,7 @@ class ActionRegistry extends BaseObject
      */
     public array $actions = [];
 
-    public function get(string $service, string $action): ActionInterface
+    public function get(string $service, string $action): AdapterInterface
     {
         $key = $service . '.' . $action;
 
@@ -28,9 +28,9 @@ class ActionRegistry extends BaseObject
         $actionClass = $this->actions[$key];
         $handler = Yii::createObject($actionClass);
 
-        if (!$handler instanceof ActionInterface) {
+        if (!$handler instanceof AdapterInterface) {
             throw new UnexpectedValueException(
-                'Обработчик должен реализовывать ActionInterface: ' . $actionClass
+                'Обработчик должен реализовывать AdapterInterface: ' . $actionClass
             );
         }
 

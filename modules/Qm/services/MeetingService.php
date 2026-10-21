@@ -12,8 +12,8 @@ class MeetingService
         $modelSearch = new MeetingSearch();
         $query = $modelSearch->search();
         $meetings = $query->asArray()->all();
-        $json = json_encode($meetings, JSON_UNESCAPED_UNICODE);
+  //      $json = json_encode($meetings, JSON_UNESCAPED_UNICODE);
 
-        return $json;
+        return $meetings;
     }
 }

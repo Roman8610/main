@@ -1,7 +1,8 @@
 <?php
 
-use app\modules\Qm\services\chat\actions\agent\ActionExecutor;
-use app\modules\Qm\services\chat\actions\agent\ActionRegistry;
+use app\modules\Qm\services\chat\actions\ActionExecutor;
+use app\modules\Qm\services\chat\actions\ActionRegistry;
+use app\modules\Qm\services\chat\adapters\GetListMeetingsAdapter;
 use app\modules\Qm\services\chat\agent\AgentOrchestrator;
 use app\modules\Qm\services\chat\ChatAccessService;
 use app\modules\Qm\services\chat\DeleteStoryChatService;
@@ -26,8 +27,8 @@ use app\modules\Qm\services\PublishMeetingQuestionService;
 use app\modules\Qm\services\RejectMeetingQuestionService;
 use app\modules\Qm\services\chat\SaveAnswerAiServise;
 use app\modules\Qm\services\chat\SaveMessageAndGetStoryService;
-use app\modules\Qm\services\SaveMessageService;
 use app\modules\Qm\services\chat\SaveMessageUserService;
+use app\modules\Qm\services\MeetingService;
 use app\modules\Qm\services\UpdateCommentService;
 
 $params = require __DIR__ . '/params.php';
@@ -42,9 +43,14 @@ $config = [
             ActionRegistry::class => [
                 'class' => ActionRegistry::class,
                 'actions' => [
+                    'meetings.getAll' => GetListMeetingsAdapter::class,
                     // 'meetingQuestion.createDraft' => CreateDraftQuestionAction::class,
                     // 'meetingQuestion.delete' => DeleteQuestionAction::class,
                 ],
+            ],
+            GetListMeetingsAdapter::class => [
+                'class' => GetListMeetingsAdapter::class,
+                'service' => MeetingService::class,
             ],
         ],
     ],
@@ -132,6 +138,9 @@ $config = [
                 ],
                 'agentOrchestrator' => [
                     'class' => AgentOrchestrator::class,
+                ],
+                'meetingService' => [
+                    'class' => MeetingService::class,
                 ],
             ]
         ],

@@ -6,8 +6,9 @@ use app\modules\Qm\dto\AnswerAiDTO;
 
 class ExtractAnswerAiService
 {
-    public function run(string $dataJson):AnswerAiDTO {
-                $dataArray = json_decode($dataJson, true);
+    public function run(string $dataJson): AnswerAiDTO
+    {
+        $dataArray = json_decode($dataJson, true);
 
         if (isset($dataArray['result']['alternatives'][0]['message']['text'])) {
             $cleanJsonString = preg_replace('/^\s*```(?:json)?\s*|\s*```\s*$/s', '', $dataArray['result']['alternatives'][0]['message']['text']);
