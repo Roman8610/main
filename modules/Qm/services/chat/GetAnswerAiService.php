@@ -11,7 +11,7 @@ class GetAnswerAiService
     /**
      * Получает ответ от ИИ
      */
-    public function run(array $context)
+    public function run(array $context):string
     {
         $iamToken = Yii::$app->params['iamToken'];
         $folderId = Yii::$app->params['folderId'];

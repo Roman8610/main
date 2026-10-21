@@ -1,6 +1,8 @@
 <?php
 
 use app\modules\Qm\services\chat\actions\agent\ActionExecutor;
+use app\modules\Qm\services\chat\actions\agent\ActionRegistry;
+use app\modules\Qm\services\chat\agent\AgentOrchestrator;
 use app\modules\Qm\services\chat\ChatAccessService;
 use app\modules\Qm\services\chat\DeleteStoryChatService;
 use app\modules\Qm\services\chat\ExecutionActionServece;
@@ -35,6 +37,17 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'container' => [
+        'definitions' => [
+            ActionRegistry::class => [
+                'class' => ActionRegistry::class,
+                'actions' => [
+                    // 'meetingQuestion.createDraft' => CreateDraftQuestionAction::class,
+                    // 'meetingQuestion.delete' => DeleteQuestionAction::class,
+                ],
+            ],
+        ],
+    ],
     'modules' => [
         'Qm' => [
             'class' => 'app\modules\Qm\Module',
@@ -116,7 +129,10 @@ $config = [
                 ],
                 'actionExecutor' => [
                     'class' => ActionExecutor::class,
-                ]
+                ],
+                'agentOrchestrator' => [
+                    'class' => AgentOrchestrator::class,
+                ],
             ]
         ],
     ],

@@ -52,7 +52,8 @@ class AiChatController extends ApiController
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             $form->user_id = (int)Yii::$app->user->id;
             $form->role = 'user';
-            Yii::$app->getModule('Qm')->get('mainOrchestratorChatService')->run($form);
+           Yii::$app->getModule('Qm')->get('saveMessageUserService')->run($form);
+           Yii::$app->getModule('Qm')->get('agentOrchestrator')->run();
         }
 
         return $this->redirect(Yii::$app->request->referrer ?: '/');

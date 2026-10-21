@@ -24,8 +24,7 @@ final class AgentOrchestrator
 
             // получаем сырые данные от ИИ
             $rawAnswer = $module->get('getAnswerAiService')->run($context);
-
-
+            // экстракция данных полученных от ИИ, формирование DTO объекта
             $plan = $module->get('extractAnswerAiService')->run($rawAnswer);
 
             $hasService = $plan->service !== '';
