@@ -19,8 +19,6 @@ final class AgentOrchestrator
         $lastActionResult = null;
         $executedActions = [];
 
-    //    $plans = [];
-
         for ($step = 0; $step < self::MAX_STEPS; $step++) {
             $context = $this->buildContext($lastActionResult);
 
@@ -28,8 +26,6 @@ final class AgentOrchestrator
             $rawAnswer = $module->get('getAnswerAiService')->run($context);
             // экстракция данных полученных от ИИ, формирование DTO объекта
             $plan = $module->get('extractAnswerAiService')->run($rawAnswer);
-
-        //    $plans[] = $plan;
 
             $hasService = $plan->service !== '';
             $hasAction = $plan->action !== '';
