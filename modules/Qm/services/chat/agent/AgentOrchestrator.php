@@ -30,9 +30,11 @@ final class AgentOrchestrator
             $hasService = $plan->service !== '';
             $hasAction = $plan->action !== '';
 
+            // Сохраняем ответ ИИ в БД и помещаем в план ID новой записи
+            $lastWrite = $module->get('saveAnswerAiServise')->run($plan);
+
             // Нет service и action — считаем ответ финальным.
             if (!$hasService && !$hasAction) {
-                $module->get('saveAnswerAiServise')->run($plan);
                 return;
             }
 
@@ -63,6 +65,8 @@ final class AgentOrchestrator
 
             // Исполнитель должен вернуть структурированный результат.
             $lastActionResult = $module->get('actionExecutor')->run($plan);
+            // Сохраняем результат выполнения действия в БД
+            $module->get('saveActionResultService')->run($lastActionResult, $lastWrite->id);
         }
 
         $module->get('saveAnswerAiServise')->run(
@@ -91,7 +95,6 @@ final class AgentOrchestrator
         }
 
         $history = AiChatMessages::find()
-            ->select(['role', 'text', 'created_at'])
             ->where(['user_id' => Yii::$app->user->id])
             ->orderBy(['created_at' => SORT_DESC])
             ->limit(self::HISTORY_LIMIT)

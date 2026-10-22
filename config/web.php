@@ -17,6 +17,7 @@ use app\modules\Qm\services\chat\GetAnswerAiAndSaveService;
 use app\modules\Qm\services\chat\GetAnswerAiService;
 use app\modules\Qm\services\chat\MainOrchestratorChatService;
 use app\modules\Qm\services\chat\McpOrchestratorService;
+use app\modules\Qm\services\chat\SaveActionResultService;
 use app\modules\Qm\services\MeetingQuestionAccessService;
 use app\modules\Qm\services\MeetingQuestionVisibilityFilterService;
 use app\modules\Qm\services\OffPublishMeetingQuestionService;
@@ -140,6 +141,9 @@ $config = [
                 ],
                 'meetingService' => [
                     'class' => MeetingService::class,
+                ],
+                'saveActionResultService' => [
+                    'class' => SaveActionResultService::class,
                 ],
             ]
         ],

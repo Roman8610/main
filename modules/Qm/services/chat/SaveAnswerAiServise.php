@@ -15,6 +15,7 @@ class SaveAnswerAiServise
         $model->role = 'assistant';
         $model->text = $ansverDto->message;
         $model->action = $ansverDto->action;
+        $model->service = $ansverDto->service;
         $model->params = json_encode($ansverDto->param);
         $model->created_at = date('Y-m-d H:i:s');
 
