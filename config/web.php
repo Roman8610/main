@@ -50,7 +50,6 @@ $config = [
             ],
             GetListMeetingsAdapter::class => [
                 'class' => GetListMeetingsAdapter::class,
-                'service' => MeetingService::class,
             ],
         ],
     ],

@@ -9,7 +9,7 @@ use Yii;
 class GetListMeetingsAdapter implements AdapterInterface
 {
     public function __construct(
-        private MeetingService $service
+       public MeetingService $service
     ) {}
 
     // Проверить и преобразовать параметры ИИ

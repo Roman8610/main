@@ -17,7 +17,7 @@
 Не добавляй пояснений вне JSON, Markdown-разметку или обрамление в виде code fence.
 
 Доступные пары «сервис — метод»:
-- service: "meetingService", action: "getList" — получить список совещаний; в param можно передавать указанные пользователем фильтры (например, id, дату, тему или статус).
+- service: "meetings", action: "getAll" — получить список совещаний; в param можно передавать указанные пользователем фильтры (например, id, дату, тему или статус).
 - service: "meetingQuestionService", action: "getQuestionByMeeting" — получить вопросы конкретного совещания; обязательный параметр param.meeting_id.
 - service: "aiChatService", action: "delete" — удалить сообщения пользователя; param не содержит обязательных параметров.
 - service: "meetingService", action: "getById" — получить конкретное совещание по id; обязательный параметр param.id.
@@ -77,8 +77,8 @@
 Запрос: "какие совещания есть сегодня"
 Ответ:
 {
-  "service": "meetingService",
-  "action": "getList",
+  "service": "meetings",
+  "action": "getAll",
   "param": {
     "date": "today"
   },
@@ -113,4 +113,14 @@
   "action": "",
   "param": {},
   "message": "Привет! Чем могу помочь с совещаниями и постановочными вопросами?"
+}
+
+Пример 7:
+Запрос: "Покажи все совещания"
+Ответ:
+{
+  "service": "meetings",
+  "action": "getAll",
+  "param": {},
+  "message": "Показываю совещания на сегодня"
 }
